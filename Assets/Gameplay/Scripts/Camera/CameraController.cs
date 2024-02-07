@@ -18,7 +18,7 @@ namespace Gameplay
             AdjustCamera(GameBoardManager.BoardSettings.boardSize, GameBoardManager.BoardSettings.cellSize);
         }
 
-        public Vector3 GetWorldPosition(Vector2 screenPosition) 
+        public Vector2 GetWorldPosition(Vector2 screenPosition) 
         {
             return camera.ScreenToWorldPoint(screenPosition);
         }

@@ -1,4 +1,6 @@
 using Common;
+using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 namespace Gameplay
@@ -11,7 +13,7 @@ namespace Gameplay
         [Space]
         [SerializeField] GameObject goCell = null;
 
-        private int[,] boardCoordinates = null;
+        private GameBoardCoordinates[] boardCoordinates = null;
 
         protected override void Awake()
         {
@@ -26,9 +28,64 @@ namespace Gameplay
             SpawnBoardCells();
         }
 
+        public Vector2 GetWorldPositionFromCoordinate(GameBoardCoordinates coordinate) 
+        {
+            return new Vector2(coordinate.x * BoardSettings.cellSize, coordinate.y * BoardSettings.cellSize);
+        }
+
+        public bool IsCoordinateInBoardBounds(GameBoardCoordinates coordinate) 
+        {
+            return GameBoardCoordinates.IsValid(coordinate)
+                && coordinate.x < BoardSettings.boardSize.x
+                && coordinate.y < BoardSettings.boardSize.y;
+        }
+
+        public bool IsCoordinatesPlaceable(IEnumerable<GameBoardCoordinates> coordinates) 
+        {
+            foreach (GameBoardCoordinates coordinate in coordinates)
+            {
+                if (!IsCoordinatePlaceable(coordinate))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool IsCoordinatePlaceable(GameBoardCoordinates coordinate) 
+        {
+            if (!IsCoordinateInBoardBounds(coordinate))
+                return false;
+
+            foreach (GameBoardCoordinates boardCoord in boardCoordinates)
+            {
+                if (!GameBoardCoordinates.IsValid(boardCoord))
+                    continue;
+
+                return false;
+            }
+
+            return true;
+        }
+
+        public GameBoardCoordinates GetCoordinateFromWorldPosition(Vector3 worldPosition) 
+        {
+            GameBoardCoordinates coordinate = new GameBoardCoordinates();
+
+            int fixedX = Mathf.CeilToInt(worldPosition.x);
+            int fixedY = Mathf.CeilToInt(worldPosition.y);
+
+            coordinate.x = fixedX < 0 ? -1 : Mathf.RoundToInt(fixedX / GameBoardManager.BoardSettings.cellSize);
+            coordinate.y = fixedY < 0 ? -1 : Mathf.RoundToInt(fixedY / GameBoardManager.BoardSettings.cellSize);
+
+            return coordinate;
+        }
+
         private void InitBoardCoordinates() 
         {
-            boardCoordinates = new int[boardSettings.boardSize.x, boardSettings.boardSize.y];
+            boardCoordinates = new GameBoardCoordinates[boardSettings.boardSize.x * boardSettings.boardSize.y];
+
+            for (int i = 0; i < boardCoordinates.Length; i++)
+                boardCoordinates[i] = GameBoardCoordinates.Invalid;
         }
 
         private void SpawnBoardCells() 
@@ -42,7 +99,7 @@ namespace Gameplay
                     cell.name = $"Cell_({x},{y})";
 
                     SpriteRenderer rend = cell.GetComponentInChildren<SpriteRenderer>();
-                    rend.color = (x + y) % 2 == 0 ? Color.white : Color.black;
+                    rend.color = (x + y) % 2 == 0 ? UnityEngine.Color.white : UnityEngine.Color.black;
                 }
             }
         }
