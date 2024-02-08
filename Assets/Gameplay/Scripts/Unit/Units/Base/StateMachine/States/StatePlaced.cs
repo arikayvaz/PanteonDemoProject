@@ -15,6 +15,8 @@ namespace Gameplay.UnitControllerStateMachine
 
             SetPosition(info);
             UpdateColor(info);
+
+            stateMachine.ChangeState(States.Idle);
         }
 
         private void SetPosition(StateInfo info)

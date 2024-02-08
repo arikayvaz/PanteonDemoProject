@@ -23,6 +23,11 @@ namespace Gameplay
             InitManager();
         }
 
+        private void Start()
+        {
+            Pathfinder.Instance.InitPathfinder(boardSettings.boardSize.x, boardSettings.boardSize.y);
+        }
+
         public void InitManager()
         {
             InitPlacedObjects();
@@ -91,8 +96,8 @@ namespace Gameplay
             int fixedX = Mathf.CeilToInt(worldPosition.x);
             int fixedY = Mathf.CeilToInt(worldPosition.y);
 
-            coordinate.x = fixedX < 0 ? -1 : Mathf.RoundToInt(fixedX / GameBoardManager.BoardSettings.cellSize);
-            coordinate.y = fixedY < 0 ? -1 : Mathf.RoundToInt(fixedY / GameBoardManager.BoardSettings.cellSize);
+            coordinate.x = fixedX < 0 ? -1 : Mathf.RoundToInt(fixedX / BoardSettings.cellSize);
+            coordinate.y = fixedY < 0 ? -1 : Mathf.RoundToInt(fixedY / BoardSettings.cellSize);
 
             return coordinate;
         }
@@ -111,6 +116,7 @@ namespace Gameplay
             }
 
             placedObjects.Add(coordinate, placedObject);
+            Pathfinder.Instance.UpdatePathNodeState(coordinate.x, coordinate.y, false);
         }
 
         private void SpawnBoardCells() 
