@@ -57,6 +57,9 @@ namespace Gameplay
 
         public void PickBuilding(BuildingTypes buildingType) 
         {
+            if (buildingPicker.IsPickedBuilding)
+                buildingPicker.DropObject();
+
             BuildingControllerBase building = buildingSpawner.SpawnBuildingForPicking(buildingType);
             buildingPicker.PickObject(building);
         }
