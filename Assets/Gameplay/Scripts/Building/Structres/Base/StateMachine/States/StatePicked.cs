@@ -46,7 +46,7 @@ namespace Gameplay.BuildingControllerStateMachine
             info.transform.position = InputManager.Instance.WorldPosition;
         }
 
-        private void OnInputCoordinateChanged(GameBoardCoordinates updatedCoordinate) 
+        private void OnInputCoordinateChanged(BoardCoordinate updatedCoordinate) 
         {
             bool isCoordinatePlaceable = GameBoardManager.Instance.IsCoordinatesPlaceable(stateInfo.controller.GetPlaceCoordinates(updatedCoordinate));
             Color visualColor = isCoordinatePlaceable ? stateInfo.buildingData.ColorPlaceable : stateInfo.buildingData.ColorUnPlaceable;

@@ -14,10 +14,10 @@ namespace Gameplay
 
         public BuildingControllerBase SpawnBuildingForPicking(BuildingTypes buildingType) 
         {
-            return SpawnBuilding(buildingType, new GameBoardCoordinates());
+            return SpawnBuilding(buildingType, new BoardCoordinate());
         }
 
-        public BuildingControllerBase SpawnBuilding(BuildingTypes buildingType, GameBoardCoordinates coordinate) 
+        public BuildingControllerBase SpawnBuilding(BuildingTypes buildingType, BoardCoordinate coordinate) 
         {
             BuildingSpawnData spawnData = GetBuildingSpawnData(buildingType);
 

@@ -8,8 +8,8 @@ namespace Gameplay
     {
         public Vector2 WorldPosition { get; private set; } = Vector2.zero;
         private Vector2 lastInputPosition = Vector2.zero;
-        public GameBoardCoordinates CurrentInputCoordinate { get; private set; } = GameBoardCoordinates.Invalid;
-        public Action<GameBoardCoordinates> OnInputCoordinateChange;
+        public BoardCoordinate CurrentInputCoordinate { get; private set; } = BoardCoordinate.Invalid;
+        public Action<BoardCoordinate> OnInputCoordinateChange;
 
         private void Update()
         {
@@ -17,15 +17,15 @@ namespace Gameplay
 
             if (Input.GetMouseButtonDown(0))
             {
-                GameBoardCoordinates coord = GetCoordinateFromInputPosition(Input.mousePosition);
+                BoardCoordinate coord = GetCoordinateFromInputPosition(Input.mousePosition);
             }
         }
 
-        private GameBoardCoordinates GetCoordinateFromInputPosition(Vector2 inputPos) 
+        private BoardCoordinate GetCoordinateFromInputPosition(Vector2 inputPos) 
         {
             Vector2 worldPos = CameraController.Instance.GetWorldPosition(inputPos);
 
-            GameBoardCoordinates coord = new GameBoardCoordinates();
+            BoardCoordinate coord = new BoardCoordinate();
 
             int fixedX = Mathf.CeilToInt(worldPos.x);
             int fixedY = Mathf.CeilToInt(worldPos.y);
@@ -50,7 +50,7 @@ namespace Gameplay
 
         private void CalculateCurrentGameBoardCoordinate(Vector2 worldPos) 
         {
-            GameBoardCoordinates calculatedCoord = GameBoardManager.Instance.GetCoordinateFromWorldPosition(worldPos);
+            BoardCoordinate calculatedCoord = GameBoardManager.Instance.GetCoordinateFromWorldPosition(worldPos);
 
             if (calculatedCoord == CurrentInputCoordinate)
                 return;

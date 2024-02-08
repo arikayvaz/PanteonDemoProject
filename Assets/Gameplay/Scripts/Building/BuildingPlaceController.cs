@@ -13,7 +13,7 @@ namespace Gameplay
         public bool PlaceBuilding(BuildingControllerBase building) 
         {
             Vector2 inputWorldPos = InputManager.Instance.WorldPosition;
-            GameBoardCoordinates placeCoord = GameBoardManager.Instance.GetCoordinateFromWorldPosition(inputWorldPos);
+            BoardCoordinate placeCoord = GameBoardManager.Instance.GetCoordinateFromWorldPosition(inputWorldPos);
 
             if (!GameBoardManager.Instance.IsCoordinatePlaceable(placeCoord))
                 return false;
@@ -22,6 +22,7 @@ namespace Gameplay
                 return false;
 
             building.Place(placeCoord);
+            GameBoardManager.Instance.OnBuildingPlaced(building, building.GetPlaceCoordinates());
             return true;
         }
     }

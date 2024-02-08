@@ -17,6 +17,6 @@ namespace Gameplay.BuildingControllerStateMachine
         public BuildingDataSO buildingData;
         [NonSerialized]
         [HideInInspector]
-        public GameBoardCoordinates coordinate;
+        public BoardCoordinate coordinate;
     }
 }

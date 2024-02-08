@@ -1,10 +1,10 @@
 namespace Gameplay
 {
-    public struct GameBoardCoordinates
+    public struct BoardCoordinate
     {
-        public static GameBoardCoordinates Invalid => new GameBoardCoordinates(-1, -1);
+        public static BoardCoordinate Invalid => new BoardCoordinate(-1, -1);
 
-        public static bool IsValid(GameBoardCoordinates coord) 
+        public static bool IsValid(BoardCoordinate coord) 
         {
             return coord.x >= 0 && coord.y >= 0;
         } 
@@ -12,7 +12,7 @@ namespace Gameplay
         public int x;
         public int y;
 
-        public GameBoardCoordinates(int x, int y)
+        public BoardCoordinate(int x, int y)
         {
             this.x = x;
             this.y = y;
@@ -25,20 +25,20 @@ namespace Gameplay
 
         public override bool Equals(object obj)
         {
-            if (!(obj is GameBoardCoordinates))
+            if (!(obj is BoardCoordinate))
                 return false;
 
-            GameBoardCoordinates c = (GameBoardCoordinates)obj;
+            BoardCoordinate c = (BoardCoordinate)obj;
 
             return x == c.x && y == c.y;
         }
 
-        public static bool operator ==(GameBoardCoordinates c1, GameBoardCoordinates c2) 
+        public static bool operator ==(BoardCoordinate c1, BoardCoordinate c2) 
         {
             return c1.Equals(c2);
         }
 
-        public static bool operator !=(GameBoardCoordinates c1, GameBoardCoordinates c2)
+        public static bool operator !=(BoardCoordinate c1, BoardCoordinate c2)
         {
             return !c1.Equals(c2);
         }

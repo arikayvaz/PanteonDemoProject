@@ -1,10 +1,11 @@
 using Gameplay.BuildingControllerStateMachine;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 namespace Gameplay
 {
-    public abstract class BuildingControllerBase : MonoBehaviour, IPickable
+    public abstract class BuildingControllerBase : MonoBehaviour, IPickable, IPlaceable
     {
         public abstract BuildingTypes BuildingType { get; }
 
@@ -22,7 +23,7 @@ namespace Gameplay
             }
         }
 
-        public virtual void InitController(BuildingDataSO buildingData, GameBoardCoordinates coordinate) 
+        public virtual void InitController(BuildingDataSO buildingData, BoardCoordinate coordinate) 
         {
             stateInfo.buildingData = buildingData;
 
@@ -32,20 +33,6 @@ namespace Gameplay
 
             SetVisualSize();
             UpdatePosition();
-        }
-
-        public IEnumerable<GameBoardCoordinates> GetPlaceCoordinates(GameBoardCoordinates origin) 
-        {
-            if (stateInfo == null || stateInfo.buildingData == null)
-                yield return GameBoardCoordinates.Invalid;
-
-            for (int y = 0; y < stateInfo.buildingData.CellSizeY; y++)
-            {
-                for (int x = 0; x < stateInfo.buildingData.CellSizeX; x++)
-                {
-                    yield return new GameBoardCoordinates(origin.x + x, origin.y + y);
-                }
-            }
         }
 
         public void UpdateVisualColor(Color colorUpdated) 
@@ -66,7 +53,7 @@ namespace Gameplay
             stateMachine.InitStateMachine(stateInfo, stateFactory.GetStates(stateMachine));
         }
 
-        private void UpdateCoordinate(GameBoardCoordinates coordinate)
+        private void UpdateCoordinate(BoardCoordinate coordinate)
         {
             stateInfo.coordinate = coordinate;
         }
@@ -98,13 +85,41 @@ namespace Gameplay
             gameObject.SetActive(false);
         }
 
-        public void Place(GameBoardCoordinates placeCoordinate) 
+        public void Place(BoardCoordinate placeCoordinate) 
         {
             if (CurrentState == States.Placed)
                 return;
 
             UpdateCoordinate(placeCoordinate);
             ChangeState(States.Placed);
+        }
+
+        public IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin)
+        {
+            if (stateInfo == null || stateInfo.buildingData == null)
+                yield return BoardCoordinate.Invalid;
+
+            for (int y = 0; y < stateInfo.buildingData.CellSizeY; y++)
+            {
+                for (int x = 0; x < stateInfo.buildingData.CellSizeX; x++)
+                {
+                    yield return new BoardCoordinate(origin.x + x, origin.y + y);
+                }
+            }
+        }
+
+        public IEnumerable<BoardCoordinate> GetPlaceCoordinates()
+        {
+            if (stateInfo == null || stateInfo.buildingData == null)
+                yield return BoardCoordinate.Invalid;
+
+            for (int y = 0; y < stateInfo.buildingData.CellSizeY; y++)
+            {
+                for (int x = 0; x < stateInfo.buildingData.CellSizeX; x++)
+                {
+                    yield return new BoardCoordinate(stateInfo.coordinate.x + x, stateInfo.coordinate.y + y);
+                }
+            }
         }
     }
 }

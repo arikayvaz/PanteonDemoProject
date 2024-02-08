@@ -13,7 +13,8 @@ namespace Gameplay
         [Space]
         [SerializeField] GameObject goCell = null;
 
-        private GameBoardCoordinates[] boardCoordinates = null;
+        //private BoardCoordinate[] boardCoordinates = null;
+        private Dictionary<BoardCoordinate, IPlaceable> placedObjects = null;
 
         protected override void Awake()
         {
@@ -24,25 +25,25 @@ namespace Gameplay
 
         public void InitManager()
         {
-            InitBoardCoordinates();
+            InitPlacedObjects();
             SpawnBoardCells();
         }
 
-        public Vector2 GetWorldPositionFromCoordinate(GameBoardCoordinates coordinate) 
+        public Vector2 GetWorldPositionFromCoordinate(BoardCoordinate coordinate) 
         {
             return new Vector2(coordinate.x * BoardSettings.cellSize, coordinate.y * BoardSettings.cellSize);
         }
 
-        public bool IsCoordinateInBoardBounds(GameBoardCoordinates coordinate) 
+        public bool IsCoordinateInBoardBounds(BoardCoordinate coordinate) 
         {
-            return GameBoardCoordinates.IsValid(coordinate)
+            return BoardCoordinate.IsValid(coordinate)
                 && coordinate.x < BoardSettings.boardSize.x
                 && coordinate.y < BoardSettings.boardSize.y;
         }
 
-        public bool IsCoordinatesPlaceable(IEnumerable<GameBoardCoordinates> coordinates) 
+        public bool IsCoordinatesPlaceable(IEnumerable<BoardCoordinate> coordinates) 
         {
-            foreach (GameBoardCoordinates coordinate in coordinates)
+            foreach (BoardCoordinate coordinate in coordinates)
             {
                 if (!IsCoordinatePlaceable(coordinate))
                     return false;
@@ -51,25 +52,37 @@ namespace Gameplay
             return true;
         }
 
-        public bool IsCoordinatePlaceable(GameBoardCoordinates coordinate) 
+        public bool IsCoordinatePlaceable(BoardCoordinate coordinate) 
         {
             if (!IsCoordinateInBoardBounds(coordinate))
                 return false;
 
-            foreach (GameBoardCoordinates boardCoord in boardCoordinates)
-            {
-                if (!GameBoardCoordinates.IsValid(boardCoord))
-                    continue;
+            if (placedObjects.Count < 1)
+                return true;
 
-                return false;
-            }
+            IPlaceable placedObject = null;
+            placedObjects.TryGetValue(coordinate, out placedObject);
 
-            return true;
+            return placedObject == null;
         }
 
-        public GameBoardCoordinates GetCoordinateFromWorldPosition(Vector3 worldPosition) 
+        public void OnBuildingPlaced(IPlaceable placedObject, IEnumerable<BoardCoordinate> coordinates) 
         {
-            GameBoardCoordinates coordinate = new GameBoardCoordinates();
+            foreach (BoardCoordinate coordinate in coordinates)
+            {
+                if (placedObjects.ContainsKey(coordinate)) 
+                {
+                    Debug.LogError("GameBoardManager: OnBuildingPlaced: contains key:" + coordinate);
+                    continue;
+                }
+
+                placedObjects.Add(coordinate, placedObject);
+            }
+        }
+
+        public BoardCoordinate GetCoordinateFromWorldPosition(Vector3 worldPosition) 
+        {
+            BoardCoordinate coordinate = new BoardCoordinate();
 
             int fixedX = Mathf.CeilToInt(worldPosition.x);
             int fixedY = Mathf.CeilToInt(worldPosition.y);
@@ -80,12 +93,17 @@ namespace Gameplay
             return coordinate;
         }
 
-        private void InitBoardCoordinates() 
+        private void InitPlacedObjects() 
         {
-            boardCoordinates = new GameBoardCoordinates[boardSettings.boardSize.x * boardSettings.boardSize.y];
+            /*
+            boardCoordinates = new BoardCoordinate[boardSettings.boardSize.x * boardSettings.boardSize.y];
 
             for (int i = 0; i < boardCoordinates.Length; i++)
-                boardCoordinates[i] = GameBoardCoordinates.Invalid;
+                boardCoordinates[i] = BoardCoordinate.Invalid;
+            */
+
+            placedObjects = new Dictionary<BoardCoordinate, IPlaceable>(boardSettings.boardSize.x * boardSettings.boardSize.y);
+
         }
 
         private void SpawnBoardCells() 
