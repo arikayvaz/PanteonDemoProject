@@ -81,9 +81,9 @@ namespace Gameplay
 
         }
 
-        public void SpawnBuilding(BuildingTypes buildingType, BoardCoordinate coordinates) 
+        public void SpawnBuilding(BuildingTypes buildingType, BoardCoordinate coordinate) 
         {
-            BuildingControllerBase building = buildingSpawner.SpawnBuilding(buildingType, coordinates);
+            BuildingControllerBase building = buildingSpawner.SpawnBuilding(buildingType, coordinate);
 
             if (building == null)
                 return;

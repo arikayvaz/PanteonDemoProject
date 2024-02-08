@@ -70,15 +70,19 @@ namespace Gameplay
         {
             foreach (BoardCoordinate coordinate in coordinates)
             {
-                if (placedObjects.ContainsKey(coordinate)) 
-                {
-                    Debug.LogError("GameBoardManager: OnBuildingPlaced: contains key:" + coordinate);
-                    continue;
-                }
-
-                placedObjects.Add(coordinate, placedObject);
+                AddPlacedObject(placedObject, coordinate);
             }
         }
+
+        public void OnUnitPlaced(IPlaceable placedObject, IEnumerable<BoardCoordinate> coordinates) 
+        {
+            foreach (BoardCoordinate coordinate in coordinates)
+            {
+                AddPlacedObject(placedObject, coordinate);
+            }
+        }
+
+        
 
         public BoardCoordinate GetCoordinateFromWorldPosition(Vector3 worldPosition) 
         {
@@ -95,15 +99,18 @@ namespace Gameplay
 
         private void InitPlacedObjects() 
         {
-            /*
-            boardCoordinates = new BoardCoordinate[boardSettings.boardSize.x * boardSettings.boardSize.y];
-
-            for (int i = 0; i < boardCoordinates.Length; i++)
-                boardCoordinates[i] = BoardCoordinate.Invalid;
-            */
-
             placedObjects = new Dictionary<BoardCoordinate, IPlaceable>(boardSettings.boardSize.x * boardSettings.boardSize.y);
+        }
 
+        private void AddPlacedObject(IPlaceable placedObject, BoardCoordinate coordinate) 
+        {
+            if (placedObjects.ContainsKey(coordinate))
+            {
+                Debug.LogError("GameBoardManager: AddPlaceObject: contains key:" + coordinate);
+                return;
+            }
+
+            placedObjects.Add(coordinate, placedObject);
         }
 
         private void SpawnBoardCells() 
