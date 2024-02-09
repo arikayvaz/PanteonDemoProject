@@ -678,10 +678,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 020ea8292cc9e864299d9a02e9652ec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitSpawner: {fileID: 376524053}
-  unitPicker: {fileID: 1934542163}
-  unitPlacer: {fileID: 1675558941}
+  spawnController: {fileID: 376524053}
+  pickController: {fileID: 1934542163}
+  placeController: {fileID: 1675558941}
+  selectController: {fileID: 1806900980}
   OnUnitPicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUnitSelected:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &639496426
@@ -699,6 +703,7 @@ Transform:
   - {fileID: 376524054}
   - {fileID: 1934542164}
   - {fileID: 1675558942}
+  - {fileID: 1806900981}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1465,6 +1470,50 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 86967374124445151, guid: b3cc609d6303c444ebe8e63db5323cf7, type: 3}
   m_PrefabInstance: {fileID: 1775390720}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1806900979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1806900981}
+  - component: {fileID: 1806900980}
+  m_Layer: 0
+  m_Name: unitSelectController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1806900980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806900979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 445da0d4010884b4dadf9b17d9de26a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1806900981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806900979}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 639496426}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1934542162
 GameObject:
   m_ObjectHideFlags: 0
@@ -1538,10 +1587,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574827c8d28d74546830dd19c537f9c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSpawner: {fileID: 102217611}
-  buildingPicker: {fileID: 605144689}
-  buildingPlacer: {fileID: 1274279263}
-  buildingSelection: {fileID: 1771553622}
+  spawnController: {fileID: 102217611}
+  pickController: {fileID: 605144689}
+  placeController: {fileID: 1274279263}
+  selectController: {fileID: 1771553622}
   OnBuildingPicked:
     m_PersistentCalls:
       m_Calls: []

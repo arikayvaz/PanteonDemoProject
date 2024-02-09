@@ -8,12 +8,16 @@ namespace Gameplay
 {
     public class UnitManager : Singleton<UnitManager>, IManager
     {
-        [SerializeField] UnitSpawnController unitSpawner = null;
-        [SerializeField] UnitPickController unitPicker = null;
-        [SerializeField] UnitPlaceController unitPlacer = null;
+        [SerializeField] UnitSpawnController spawnController = null;
+        [SerializeField] UnitPickController pickController = null;
+        [SerializeField] UnitPlaceController placeController = null;
+        [SerializeField] UnitSelectController selectController = null;
 
         [HideInInspector]
         public UnityEvent OnUnitPicked;
+
+        [HideInInspector]
+        public UnityEvent OnUnitSelected;
 
         List<UnitControllerBase> units = null;
 
@@ -61,22 +65,35 @@ namespace Gameplay
                 PlaceUnit();
                 return;
             }
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                SelectUnit(InputManager.Instance.CurrentInputCoordinate);
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                DeselectUnit();
+                return;
+            }
         }
 
         public void InitManager()
         {
             units = new List<UnitControllerBase>();
 
-            unitSpawner.InitController();
-            unitPicker.InitController();
-            unitPlacer.InitController();
+            spawnController.InitController();
+            pickController.InitController();
+            placeController.InitController();
 
             BuildingManager.Instance.OnBuildingPicked.AddListener(OnBuildingPicked);
+            BuildingManager.Instance.OnBuildingSelected.AddListener(OnBuildingSelected);
         }
 
         public void SpawnUnit(UnitTypes unitType, BoardCoordinate coordinate) 
         {
-            UnitControllerBase unit = unitSpawner.SpawnUnit(unitType, coordinate);
+            UnitControllerBase unit = spawnController.SpawnUnit(unitType, coordinate);
 
             if (unit == null)
                 return;
@@ -86,34 +103,47 @@ namespace Gameplay
 
         public void PickUnit(UnitTypes unitType)
         {
-            if (unitPicker.IsPickedUnit)
-                unitPicker.DropObject();
+            if (pickController.IsPickedUnit)
+                pickController.DropObject();
 
-            UnitControllerBase unit = unitSpawner.SpawnUnitForPicking(unitType);
+            UnitControllerBase unit = spawnController.SpawnUnitForPicking(unitType);
 
             if (unit == null)
                 return;
 
-            unitPicker.PickObject(unit);
+            pickController.PickObject(unit);
 
             OnUnitPicked?.Invoke();
         }
 
         public void DropUnit()
         {
-            unitPicker.DropObject();
+            pickController.DropObject();
         }
 
         public void PlaceUnit()
         {
-            if (!unitPicker.IsPickedUnit)
+            if (!pickController.IsPickedUnit)
                 return;
 
-            bool isPlacingSuccess = unitPlacer.PlaceUnit(unitPicker.PickedUnit);
+            bool isPlacingSuccess = placeController.PlaceUnit(pickController.PickedUnit);
 
             if (isPlacingSuccess)
-                unitPicker.DropObject();
+                pickController.DropObject();
 
+        }
+
+        public void SelectUnit(BoardCoordinate coordinate) 
+        {
+            bool isSelectSuccess = selectController.SelectUnit(coordinate);
+
+            if (isSelectSuccess)
+                OnUnitSelected?.Invoke();
+        }
+
+        public void DeselectUnit() 
+        {
+            selectController.DeselectUnit();
         }
 
         public void AddUnit(UnitControllerBase unit) 
@@ -135,6 +165,11 @@ namespace Gameplay
         private void OnBuildingPicked() 
         {
             DropUnit();
+        }
+
+        private void OnBuildingSelected() 
+        {
+            DeselectUnit();
         }
     }
 }

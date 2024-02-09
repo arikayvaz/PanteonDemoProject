@@ -133,5 +133,10 @@ namespace Gameplay
         {
             ChangeState(States.Placed);
         }
+
+        public bool CanSelect() 
+        {
+            return CurrentState == States.Placed;
+        }
     }
 }

@@ -8,10 +8,10 @@ namespace Gameplay
 {
     public class BuildingManager : Singleton<BuildingManager>, IManager
     {
-        [SerializeField] BuildingSpawnController buildingSpawner = null;
-        [SerializeField] BuildingPickController buildingPicker = null;
-        [SerializeField] BuildingPlaceController buildingPlacer = null;
-        [SerializeField] BuildingSelectController buildingSelection = null;
+        [SerializeField] BuildingSpawnController spawnController = null;
+        [SerializeField] BuildingPickController pickController = null;
+        [SerializeField] BuildingPlaceController placeController = null;
+        [SerializeField] BuildingSelectController selectController = null;
 
         List<BuildingControllerBase> buildings = null;
 
@@ -77,48 +77,49 @@ namespace Gameplay
         {
             buildings = new List<BuildingControllerBase>();
 
-            buildingSpawner.InitController();
-            buildingPicker.InitController();
-            buildingPlacer.InitController();
+            spawnController.InitController();
+            pickController.InitController();
+            placeController.InitController();
 
             UnitManager.Instance.OnUnitPicked.AddListener(OnUnitPicked);
+            UnitManager.Instance.OnUnitSelected.AddListener(OnUnitSelected);
         }
 
         public void PickBuilding(BuildingTypes buildingType) 
         {
-            if (buildingPicker.IsPickedBuilding)
-                buildingPicker.DropObject();
+            if (pickController.IsPickedBuilding)
+                pickController.DropObject();
 
-            BuildingControllerBase building = buildingSpawner.SpawnBuildingForPicking(buildingType);
+            BuildingControllerBase building = spawnController.SpawnBuildingForPicking(buildingType);
 
             if (building == null)
                 return;
 
-            buildingPicker.PickObject(building);
+            pickController.PickObject(building);
 
             OnBuildingPicked?.Invoke();
         }
 
         public void DropBuilding() 
         {
-            buildingPicker.DropObject();
+            pickController.DropObject();
         }
 
         public void PlaceBuilding() 
         {
-            if (!buildingPicker.IsPickedBuilding)
+            if (!pickController.IsPickedBuilding)
                 return;
 
-            bool isPlacingSuccess = buildingPlacer.PlaceBuilding(buildingPicker.PickedBuilding);
+            bool isPlacingSuccess = placeController.PlaceBuilding(pickController.PickedBuilding);
 
             if (isPlacingSuccess)
-                buildingPicker.DropObject();
+                pickController.DropObject();
 
         }
 
         public void SpawnBuilding(BuildingTypes buildingType, BoardCoordinate coordinate) 
         {
-            BuildingControllerBase building = buildingSpawner.SpawnBuilding(buildingType, coordinate);
+            BuildingControllerBase building = spawnController.SpawnBuilding(buildingType, coordinate);
 
             if (building == null)
                 return;
@@ -128,10 +129,7 @@ namespace Gameplay
 
         public void SelectBuilding(BoardCoordinate coordinate) 
         {
-            if (buildingSelection.IsBuildingSelected)
-                buildingSelection.DeselectBuilding();
-
-            bool isSelectionSuccess = buildingSelection.SelectBuilding(coordinate);
+            bool isSelectionSuccess = selectController.SelectBuilding(coordinate);
 
             if (isSelectionSuccess)
                 OnBuildingSelected?.Invoke();
@@ -139,7 +137,7 @@ namespace Gameplay
 
         public void DeselectBuilding() 
         {
-            buildingSelection.DeselectBuilding();
+            selectController.DeselectBuilding();
         }
 
         private void AddBuilding(BuildingControllerBase building) 
@@ -161,6 +159,11 @@ namespace Gameplay
         private void OnUnitPicked() 
         {
             DropBuilding();
+        }
+
+        private void OnUnitSelected() 
+        {
+            DeselectBuilding();
         }
     }
 }

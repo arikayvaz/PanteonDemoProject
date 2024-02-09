@@ -4,7 +4,7 @@ using Gameplay.UnitControllerStateMachine;
 
 namespace Gameplay
 {
-    public class UnitControllerBase : MonoBehaviour, IPickable, IPlaceable
+    public class UnitControllerBase : MonoBehaviour, IPickable, IPlaceable, ISelectable
     {
         [SerializeField] protected UnitTypes unitType = UnitTypes.None;
 
@@ -119,6 +119,21 @@ namespace Gameplay
         private void ChangeState(States stateNew)
         {
             stateMachine.ChangeState(stateNew);
+        }
+
+        public void Select()
+        {
+            ChangeState(States.Selected);
+        }
+
+        public void Deselect()
+        {
+            ChangeState(States.Idle);
+        }
+
+        public bool CanSelect() 
+        {
+            return CurrentState == States.Idle;
         }
     }
 }

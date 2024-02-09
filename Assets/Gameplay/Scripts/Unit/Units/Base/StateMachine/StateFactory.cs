@@ -23,6 +23,8 @@ namespace Gameplay.UnitControllerStateMachine
                     return new StateMovingToTarget(stateMachine);
                 case States.Attacking:
                     return new StateAttacking(stateMachine);
+                case States.Selected:
+                    return new StateSelected(stateMachine);
                 default:
                     return null;
             }

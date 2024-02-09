@@ -8,6 +8,7 @@ namespace Gameplay.UnitControllerStateMachine
         Idle,
         MovingToPosition,
         MovingToTarget,
-        Attacking
+        Attacking,
+        Selected
     }
 }

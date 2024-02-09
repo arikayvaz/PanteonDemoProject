@@ -1,4 +1,5 @@
 using Common;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Gameplay
@@ -7,7 +8,7 @@ namespace Gameplay
     {
         public bool IsBuildingSelected => selectedBuilding != null;
 
-        private ISelectable selectedBuilding = null;
+        private BuildingControllerBase selectedBuilding = null;
 
         public void InitController() 
         {
@@ -21,10 +22,21 @@ namespace Gameplay
             if (placedObject == null)
                 return false;
 
-            selectedBuilding = placedObject as ISelectable;
+            BuildingControllerBase building = placedObject as BuildingControllerBase;
 
-            selectedBuilding?.Select();
-            return selectedBuilding != null;
+            if (building == null)
+                return false;
+
+            if (!building.CanSelect() || building == selectedBuilding)
+                return false;
+
+            if (IsBuildingSelected)
+                DeselectBuilding();
+
+            selectedBuilding = building;
+            selectedBuilding.Select();
+
+            return true;
         }
 
         public void DeselectBuilding() 

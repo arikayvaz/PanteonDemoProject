@@ -6,5 +6,6 @@ namespace Gameplay
     {
         void Select();
         void Deselect();
+        bool CanSelect();
     }
 }
