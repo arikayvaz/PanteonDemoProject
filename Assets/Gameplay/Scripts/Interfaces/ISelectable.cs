@@ -7,5 +7,6 @@ namespace Gameplay
         void Select();
         void Deselect();
         bool CanSelect();
+        bool IsEqual(ISelectable selectable);
     }
 }

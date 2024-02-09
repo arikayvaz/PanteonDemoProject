@@ -40,6 +40,10 @@ namespace Gameplay
             for (int i = 0; i < calculatedPath.Count; i++)
             {
                 PathNode node = calculatedPath[i];
+
+                if (node.x == start.x && node.y == start.y)
+                    continue;
+
                 coordinates.Add(new BoardCoordinate(node.x, node.y));
             }
 

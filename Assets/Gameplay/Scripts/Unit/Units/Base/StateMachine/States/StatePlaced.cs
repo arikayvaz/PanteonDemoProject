@@ -21,7 +21,7 @@ namespace Gameplay.UnitControllerStateMachine
 
         private void SetPosition(StateInfo info)
         {
-            info.transform.position = GameBoardManager.Instance.GetWorldPositionFromCoordinate(info.coordinate);
+            info.transform.position = GameBoardManager.Instance.GetWorldPositionFromCoordinate(info.currentCoordinate);
         }
 
         private void UpdateColor(StateInfo info)

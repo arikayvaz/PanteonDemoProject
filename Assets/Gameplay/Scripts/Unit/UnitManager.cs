@@ -11,7 +11,6 @@ namespace Gameplay
         [SerializeField] UnitSpawnController spawnController = null;
         [SerializeField] UnitPickController pickController = null;
         [SerializeField] UnitPlaceController placeController = null;
-        [SerializeField] UnitSelectController selectController = null;
 
         [HideInInspector]
         public UnityEvent OnUnitPicked;
@@ -20,6 +19,8 @@ namespace Gameplay
         public UnityEvent OnUnitSelected;
 
         List<UnitControllerBase> units = null;
+
+        private GameBoardSelectController<UnitControllerBase> selectController = null;
 
         private void Start()
         {
@@ -77,6 +78,12 @@ namespace Gameplay
                 DeselectUnit();
                 return;
             }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                HandleUnitCommand(InputManager.Instance.CurrentInputCoordinate);
+                return;
+            }
         }
 
         public void InitManager()
@@ -86,6 +93,9 @@ namespace Gameplay
             spawnController.InitController();
             pickController.InitController();
             placeController.InitController();
+
+            selectController = new GameBoardSelectController<UnitControllerBase>();
+            selectController.InitController();
 
             BuildingManager.Instance.OnBuildingPicked.AddListener(OnBuildingPicked);
             BuildingManager.Instance.OnBuildingSelected.AddListener(OnBuildingSelected);
@@ -135,7 +145,7 @@ namespace Gameplay
 
         public void SelectUnit(BoardCoordinate coordinate) 
         {
-            bool isSelectSuccess = selectController.SelectUnit(coordinate);
+            bool isSelectSuccess = selectController.SelectObject(coordinate);
 
             if (isSelectSuccess)
                 OnUnitSelected?.Invoke();
@@ -143,7 +153,7 @@ namespace Gameplay
 
         public void DeselectUnit() 
         {
-            selectController.DeselectUnit();
+            selectController.DeselectObject();
         }
 
         public void AddUnit(UnitControllerBase unit) 
@@ -160,6 +170,38 @@ namespace Gameplay
                 return;
 
             units.Remove(unit);
+        }
+
+        private void HandleUnitCommand(BoardCoordinate coordinate) 
+        {
+            if (!selectController.IsSelectedObject)
+                return;
+
+            if (!GameBoardManager.Instance.IsCoordinateInBoardBounds(coordinate))
+                return;
+
+            bool isAttackingSuccess = Attack(coordinate);
+
+            if (isAttackingSuccess)
+                return;
+
+            MoveToCoordinate(coordinate);
+        }
+
+        private bool Attack(BoardCoordinate coordinate) 
+        {
+            return false;
+        }
+
+        private void MoveToCoordinate(BoardCoordinate coordinate) 
+        {
+            UnitControllerBase selectedUnit = selectController.GetSelectedObject();
+
+            if (selectedUnit == null)
+                return;
+
+            selectController.DeselectObject();
+            selectedUnit.Move(coordinate);
         }
 
         private void OnBuildingPicked() 

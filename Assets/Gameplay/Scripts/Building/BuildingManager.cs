@@ -11,9 +11,10 @@ namespace Gameplay
         [SerializeField] BuildingSpawnController spawnController = null;
         [SerializeField] BuildingPickController pickController = null;
         [SerializeField] BuildingPlaceController placeController = null;
-        [SerializeField] BuildingSelectController selectController = null;
 
         List<BuildingControllerBase> buildings = null;
+
+        private GameBoardSelectController<BuildingControllerBase> selectController = null;
 
         [HideInInspector]
         public UnityEvent OnBuildingPicked;
@@ -81,6 +82,9 @@ namespace Gameplay
             pickController.InitController();
             placeController.InitController();
 
+            selectController = new GameBoardSelectController<BuildingControllerBase>();
+            selectController.InitController();
+
             UnitManager.Instance.OnUnitPicked.AddListener(OnUnitPicked);
             UnitManager.Instance.OnUnitSelected.AddListener(OnUnitSelected);
         }
@@ -129,7 +133,7 @@ namespace Gameplay
 
         public void SelectBuilding(BoardCoordinate coordinate) 
         {
-            bool isSelectionSuccess = selectController.SelectBuilding(coordinate);
+            bool isSelectionSuccess = selectController.SelectObject(coordinate);
 
             if (isSelectionSuccess)
                 OnBuildingSelected?.Invoke();
@@ -137,7 +141,7 @@ namespace Gameplay
 
         public void DeselectBuilding() 
         {
-            selectController.DeselectBuilding();
+            selectController.DeselectObject();
         }
 
         private void AddBuilding(BuildingControllerBase building) 

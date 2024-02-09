@@ -17,6 +17,12 @@ namespace Gameplay.UnitControllerStateMachine
         public UnitDataSO unitData;
         [NonSerialized]
         [HideInInspector]
-        public BoardCoordinate coordinate;
+        public BoardCoordinate currentCoordinate;
+        [NonSerialized]
+        [HideInInspector]
+        public BoardCoordinate targetCoordinate;
+        [NonSerialized]
+        [HideInInspector]
+        public BoardCoordinate[] movePath;
     }
 }

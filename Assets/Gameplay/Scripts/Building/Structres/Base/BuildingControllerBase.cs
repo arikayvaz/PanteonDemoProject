@@ -138,5 +138,15 @@ namespace Gameplay
         {
             return CurrentState == States.Placed;
         }
+
+        public bool IsEqual(ISelectable selectable) 
+        {
+            BuildingControllerBase building = selectable as BuildingControllerBase;
+
+            if (building == null)
+                return false;
+
+            return building == this;
+        }
     }
 }

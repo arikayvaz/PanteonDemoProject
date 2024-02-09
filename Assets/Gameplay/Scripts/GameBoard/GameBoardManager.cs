@@ -13,8 +13,7 @@ namespace Gameplay
         [Space]
         [SerializeField] GameObject goCell = null;
 
-        //private BoardCoordinate[] boardCoordinates = null;
-        private Dictionary<BoardCoordinate, IPlaceable> placedObjects = null;
+        private IPlaceable[,] placedObjects = null;
 
         protected override void Awake()
         {
@@ -62,13 +61,10 @@ namespace Gameplay
             if (!IsCoordinateInBoardBounds(coordinate))
                 return false;
 
-            if (placedObjects.Count < 1)
+            if (placedObjects.Length < 1)
                 return true;
 
-            IPlaceable placedObject = null;
-            placedObjects.TryGetValue(coordinate, out placedObject);
-
-            return placedObject == null;
+            return placedObjects[coordinate.x, coordinate.y] == null;
         }
 
         public void OnBuildingPlaced(IPlaceable placedObject, IEnumerable<BoardCoordinate> coordinates) 
@@ -102,30 +98,66 @@ namespace Gameplay
 
         public IPlaceable GetPlacedObject(BoardCoordinate coordinate) 
         {
-            if (placedObjects == null || placedObjects.Count < 1)
+            if (placedObjects == null || placedObjects.Length < 1)
                 return null;
 
-            IPlaceable placedObject = null;
-            placedObjects.TryGetValue(coordinate, out placedObject);
-
-            return placedObject;
+            return placedObjects[coordinate.x, coordinate.y];
         }  
+
+        public bool UpdatePlaceableCoordinate(BoardCoordinate oldCoordinate, BoardCoordinate newCoordinate) 
+        {
+            IPlaceable placeable = placedObjects[oldCoordinate.x, oldCoordinate.y];
+
+            if (placeable == null) 
+            {
+                Debug.LogError("GameBoardManager: UpdatePlaceableCoordinate: No placeable on old coordinate: " + oldCoordinate);
+                return false;
+            }
+
+            if (placedObjects[newCoordinate.x, newCoordinate.y] != null)
+            {
+                Debug.LogError("GameBoardManager: UpdatePlaceableCoordinate: New coordinate is not empty: " + newCoordinate);
+                return false;
+            }
+
+            RemovePlacedObject(oldCoordinate);
+            AddPlacedObject(placeable, newCoordinate);
+            return true;
+        }
 
         private void InitPlacedObjects() 
         {
-            placedObjects = new Dictionary<BoardCoordinate, IPlaceable>(boardSettings.boardSize.x * boardSettings.boardSize.y);
+            placedObjects = new IPlaceable[boardSettings.boardSize.x, boardSettings.boardSize.y];
         }
 
         private void AddPlacedObject(IPlaceable placedObject, BoardCoordinate coordinate)
         {
-            if (placedObjects.ContainsKey(coordinate))
+            if (placedObjects == null)
+                InitPlacedObjects();
+
+            if (placedObjects[coordinate.x, coordinate.y] != null) 
             {
                 Debug.LogError("GameBoardManager: AddPlaceObject: contains key:" + coordinate);
                 return;
             }
 
-            placedObjects.Add(coordinate, placedObject);
+            placedObjects[coordinate.x, coordinate.y] = placedObject;
             Pathfinder.Instance.UpdatePathNodeState(coordinate.x, coordinate.y, false);
+        }
+
+        private void RemovePlacedObject(BoardCoordinate coordinate) 
+        {
+            if (placedObjects?.Length < 1)
+                return;
+
+            if (placedObjects[coordinate.x, coordinate.y] == null)
+            {
+                Debug.LogError("GameBoardManager: RemovePlacedObject: no placed object" + coordinate);
+                return;
+            }
+
+            placedObjects[coordinate.x, coordinate.y] = null;
+            Pathfinder.Instance.UpdatePathNodeState(coordinate.x, coordinate.y, true);
         }
 
         private void SpawnBoardCells() 

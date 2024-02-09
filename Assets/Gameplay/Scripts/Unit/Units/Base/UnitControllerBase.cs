@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Gameplay.UnitControllerStateMachine;
+using System.Collections;
 
 namespace Gameplay
 {
-    public class UnitControllerBase : MonoBehaviour, IPickable, IPlaceable, ISelectable
+    public class UnitControllerBase : MonoBehaviour, IPickable, IPlaceable, ISelectable, IMoveable
     {
         [SerializeField] protected UnitTypes unitType = UnitTypes.None;
 
@@ -17,7 +18,7 @@ namespace Gameplay
         {
             get
             {
-                return GameBoardManager.Instance?.GetWorldPositionFromCoordinate(stateInfo.coordinate) ?? Vector2.zero;
+                return GameBoardManager.Instance?.GetWorldPositionFromCoordinate(stateInfo.currentCoordinate) ?? Vector2.zero;
             }
         }
 
@@ -31,7 +32,6 @@ namespace Gameplay
             InitStateMachine();
 
             SetVisualSize();
-            UpdatePosition();
         }
 
         public void UpdateVisualColor(Color colorUpdated)
@@ -88,7 +88,7 @@ namespace Gameplay
             {
                 for (int x = 0; x < stateInfo.unitData.CellSizeX; x++)
                 {
-                    yield return new BoardCoordinate(stateInfo.coordinate.x + x, stateInfo.coordinate.y + y);
+                    yield return new BoardCoordinate(stateInfo.currentCoordinate.x + x, stateInfo.currentCoordinate.y + y);
                 }
             }
         }
@@ -101,9 +101,15 @@ namespace Gameplay
             stateMachine.InitStateMachine(stateInfo, stateFactory.GetStates(stateMachine));
         }
 
-        private void UpdateCoordinate(BoardCoordinate coordinate)
+        public void UpdateCoordinate(BoardCoordinate coordinate)
         {
-            stateInfo.coordinate = coordinate;
+            stateInfo.currentCoordinate = coordinate;
+            UpdatePosition();
+        }
+
+        public void HandleCoroutine(IEnumerator enumerator) 
+        {
+            StartCoroutine(enumerator);
         }
 
         private void SetVisualSize()
@@ -134,6 +140,24 @@ namespace Gameplay
         public bool CanSelect() 
         {
             return CurrentState == States.Idle;
+        }
+
+        public bool IsEqual(ISelectable selectable) 
+        {
+            UnitControllerBase unit = selectable as UnitControllerBase;
+
+            if (unit == null)
+                return false;
+
+            return unit == this;
+        }
+
+        public void Move(BoardCoordinate targetCoordinate)
+        {
+            stateInfo.targetCoordinate = targetCoordinate;
+            stateInfo.movePath = Pathfinder.Instance.CalculatePathCoordinates(stateInfo.currentCoordinate, targetCoordinate).ToArray();
+
+            ChangeState(States.MovingToPosition);
         }
     }
 }
