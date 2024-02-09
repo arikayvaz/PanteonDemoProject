@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public abstract class BuildingControllerBase : MonoBehaviour, IPickable, IPlaceable
+    public abstract class BuildingControllerBase : MonoBehaviour, IPickable, IPlaceable, ISelectable
     {
         public abstract BuildingTypes BuildingType { get; }
 
@@ -90,6 +90,9 @@ namespace Gameplay
                 return;
 
             UpdateCoordinate(coordinate);
+            UpdatePosition();
+            UpdateVisualColor(stateInfo.ColorBuilding);
+
             ChangeState(States.Placed);
         }
 
@@ -119,6 +122,16 @@ namespace Gameplay
                     yield return new BoardCoordinate(stateInfo.coordinate.x + x, stateInfo.coordinate.y + y);
                 }
             }
+        }
+
+        public void Select()
+        {
+            ChangeState(States.Selected);
+        }
+
+        public void Deselect()
+        {
+            ChangeState(States.Placed);
         }
     }
 }

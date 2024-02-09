@@ -18,5 +18,4 @@ MonoBehaviour:
   <AttackDamage>k__BackingField: 5
   <AttackTimeInterval>k__BackingField: 0.5
   <UnitColor>k__BackingField: {r: 1, g: 0.4679103, b: 0.10849059, a: 1}
-  <ColorPlaceable>k__BackingField: {r: 0.40392157, g: 1, b: 0, a: 0.5882353}
-  <ColorUnPlaceable>k__BackingField: {r: 1, g: 0.23921569, b: 0.23921569, a: 0.5882353}
+  <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}

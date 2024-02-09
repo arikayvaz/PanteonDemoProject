@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3982fec7c6aeb3743a7db8ba67ed60a4, type: 3}
+  m_Name: StateColorData
+  m_EditorClassIdentifier: 
+  <ColorPlaceable>k__BackingField: {r: 0.4380169, g: 1, b: 0, a: 0.5882353}
+  <ColorUnPlaceable>k__BackingField: {r: 1, g: 0.062675394, b: 0, a: 0.5882353}
+  <ColorSelected>k__BackingField: {r: 1, g: 0.976174, b: 0, a: 1}

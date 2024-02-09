@@ -87,8 +87,6 @@ namespace Gameplay
             }
         }
 
-        
-
         public BoardCoordinate GetCoordinateFromWorldPosition(Vector3 worldPosition) 
         {
             BoardCoordinate coordinate = new BoardCoordinate();
@@ -102,12 +100,23 @@ namespace Gameplay
             return coordinate;
         }
 
+        public IPlaceable GetPlacedObject(BoardCoordinate coordinate) 
+        {
+            if (placedObjects == null || placedObjects.Count < 1)
+                return null;
+
+            IPlaceable placedObject = null;
+            placedObjects.TryGetValue(coordinate, out placedObject);
+
+            return placedObject;
+        }  
+
         private void InitPlacedObjects() 
         {
             placedObjects = new Dictionary<BoardCoordinate, IPlaceable>(boardSettings.boardSize.x * boardSettings.boardSize.y);
         }
 
-        private void AddPlacedObject(IPlaceable placedObject, BoardCoordinate coordinate) 
+        private void AddPlacedObject(IPlaceable placedObject, BoardCoordinate coordinate)
         {
             if (placedObjects.ContainsKey(coordinate))
             {

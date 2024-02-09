@@ -6,6 +6,7 @@ namespace Gameplay.BuildingControllerStateMachine
     {
         None,
         Picked,
-        Placed
+        Placed,
+        Selected
     }
 }

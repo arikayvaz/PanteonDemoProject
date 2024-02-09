@@ -8,6 +8,6 @@ namespace Gameplay
         void Place(BoardCoordinate coordinate);
 
         IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin);
-        public IEnumerable<BoardCoordinate> GetPlaceCoordinates();
+        IEnumerable<BoardCoordinate> GetPlaceCoordinates();
     }
 }

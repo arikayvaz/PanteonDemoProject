@@ -15,6 +15,8 @@ namespace Gameplay.BuildingControllerStateMachine
                     return new StatePicked(stateMachine);
                 case States.Placed:
                     return new StatePlaced(stateMachine);
+                case States.Selected:
+                    return new StateSelected(stateMachine);
                 default:
                     return null;
             }

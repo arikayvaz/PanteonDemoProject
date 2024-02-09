@@ -15,5 +15,5 @@ MonoBehaviour:
   <CellSizeX>k__BackingField: 2
   <CellSizeY>k__BackingField: 3
   <Health>k__BackingField: 50
-  <ColorPlaceable>k__BackingField: {r: 0.40392157, g: 1, b: 0, a: 0.5882353}
-  <ColorUnPlaceable>k__BackingField: {r: 1, g: 0.23921569, b: 0.23921569, a: 0.5882353}
+  <BuildingColor>k__BackingField: {r: 0.7924528, g: 0.5612376, b: 0, a: 1}
+  <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}

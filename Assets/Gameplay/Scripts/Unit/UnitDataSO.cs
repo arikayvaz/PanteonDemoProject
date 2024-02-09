@@ -11,7 +11,8 @@ namespace Gameplay
         [field: SerializeField, Min(0)] public int AttackDamage { get; private set; } = 0;
         [field: SerializeField, Min(0f)] public float AttackTimeInterval { get; private set; } = 0;
         [field: SerializeField] public Color UnitColor { get; private set; } = Color.white;
-        [field: SerializeField] public Color ColorPlaceable { get; private set; } = Color.white;
-        [field: SerializeField] public Color ColorUnPlaceable { get; private set; } = Color.white;
+        [field: SerializeField] public StateColorDataSO StateColorData { get; private set; } = null;
+        public Color ColorPlaceable => StateColorData?.ColorPlaceable ?? Color.white;
+        public Color ColorUnPlaceable => StateColorData?.ColorUnPlaceable ?? Color.white;
     }
 }

@@ -1,6 +1,8 @@
 using Common;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gameplay
 {
@@ -10,13 +12,21 @@ namespace Gameplay
         [SerializeField] UnitPickController unitPicker = null;
         [SerializeField] UnitPlaceController unitPlacer = null;
 
+        [HideInInspector]
+        public UnityEvent OnUnitPicked;
+
         List<UnitControllerBase> units = null;
 
-        protected override void Awake()
+        private void Start()
         {
-            base.Awake();
-
             InitManager();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            OnUnitPicked?.RemoveAllListeners();
         }
 
         private void Update()
@@ -60,6 +70,8 @@ namespace Gameplay
             unitSpawner.InitController();
             unitPicker.InitController();
             unitPlacer.InitController();
+
+            BuildingManager.Instance.OnBuildingPicked.AddListener(OnBuildingPicked);
         }
 
         public void SpawnUnit(UnitTypes unitType, BoardCoordinate coordinate) 
@@ -78,7 +90,13 @@ namespace Gameplay
                 unitPicker.DropObject();
 
             UnitControllerBase unit = unitSpawner.SpawnUnitForPicking(unitType);
+
+            if (unit == null)
+                return;
+
             unitPicker.PickObject(unit);
+
+            OnUnitPicked?.Invoke();
         }
 
         public void DropUnit()
@@ -112,6 +130,11 @@ namespace Gameplay
                 return;
 
             units.Remove(unit);
+        }
+
+        private void OnBuildingPicked() 
+        {
+            DropUnit();
         }
     }
 }

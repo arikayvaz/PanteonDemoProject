@@ -10,7 +10,6 @@ namespace Gameplay.BuildingControllerStateMachine
         public Transform transform = null;
         public SpriteRenderer spriteVisual = null;
         public BuildingControllerBase controller = null;
-        public Color colorPlaced = Color.white;
 
         [HideInInspector]
         [NonSerialized]
@@ -18,5 +17,7 @@ namespace Gameplay.BuildingControllerStateMachine
         [NonSerialized]
         [HideInInspector]
         public BoardCoordinate coordinate;
+
+        public Color ColorBuilding => buildingData?.BuildingColor ?? Color.white;
     }
 }
