@@ -116,12 +116,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f70f45f66a8e944c8507f94e3259acc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trVisual: {fileID: 7280615054336644544}
   stateInfo:
     transform: {fileID: 7280615055073729254}
     spriteVisual: {fileID: 7280615053506755194}
+    trVisual: {fileID: 7280615054336644544}
     controller: {fileID: 1922170509713105099}
-    colorPlaced: {r: 0, g: 0.5188679, b: 0.0018551215, a: 1}
 --- !u!4 &7280615055073729254 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2653939379207005123, guid: 46d04378b2e396840a19425f5dc6fb37, type: 3}

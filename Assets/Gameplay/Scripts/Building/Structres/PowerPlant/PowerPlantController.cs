@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class PowerPlantController : BuildingControllerBase
+    public class PowerPlantController : BuildingController
     {
-        public override BuildingTypes BuildingType => BuildingTypes.PowerPlant;
+
     }
 }

@@ -10,7 +10,7 @@ namespace Gameplay
             
         }
 
-        public bool PlaceBuilding(BuildingControllerBase building) 
+        public bool PlaceBuilding(BuildingController building) 
         {
             Vector2 inputWorldPos = InputManager.Instance.WorldPosition;
             BoardCoordinate placeCoord = GameBoardManager.Instance.GetCoordinateFromWorldPosition(inputWorldPos);

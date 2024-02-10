@@ -22,11 +22,6 @@ namespace Gameplay
 
         private GameBoardSelectController<UnitControllerBase> selectController = null;
 
-        private void Start()
-        {
-            InitManager();
-        }
-
         protected override void OnDestroy()
         {
             base.OnDestroy();

@@ -4,21 +4,42 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class InputManager : Singleton<InputManager>
+    public class InputManager : Singleton<InputManager>, IManager
     {
         public Vector2 WorldPosition { get; private set; } = Vector2.zero;
         private Vector2 lastInputPosition = Vector2.zero;
         public BoardCoordinate CurrentInputCoordinate { get; private set; } = BoardCoordinate.Invalid;
         public Action<BoardCoordinate> OnInputCoordinateChange;
 
+        private bool isInitialized = false;
+
+        public void InitManager() 
+        {
+            isInitialized = true;
+        }
+
         private void Update()
         {
+            if (!isInitialized)
+                return;
+
             CalculateWorldPosition(Input.mousePosition);
 
             if (Input.GetMouseButtonDown(0))
             {
                 BoardCoordinate coord = GetCoordinateFromInputPosition(Input.mousePosition);
+
+                HandleLeftClickInput(coord);
+                return;
             }
+        }
+
+        private void HandleLeftClickInput(BoardCoordinate coordinate) 
+        {
+            bool isHandled = BuildingManager.Instance.HandleLeftClickInput(coordinate);
+
+            if (isHandled)
+                return;
         }
 
         private BoardCoordinate GetCoordinateFromInputPosition(Vector2 inputPos) 

@@ -1,51 +1,59 @@
 using UnityEngine;
 using Common;
+using System.Collections.Generic;
 
 namespace Gameplay
 {
     public class BuildingSpawnController : MonoBehaviour, IController
     {
-        [SerializeField] BuildingSpawnData[] spawnDatas = null;
+        [SerializeField] BuildingSpawnModel[] spawnModels = null;
 
         public void InitController()
         {
             
         }
 
-        public BuildingControllerBase SpawnBuildingForPicking(BuildingTypes buildingType) 
+        public BuildingController SpawnBuildingForPicking(BuildingModel model) 
         {
-            return SpawnBuilding(buildingType, new BoardCoordinate());
+            return SpawnBuilding(model, BoardCoordinate.Invalid);
         }
 
-        public BuildingControllerBase SpawnBuilding(BuildingTypes buildingType, BoardCoordinate coordinate) 
+        public BuildingController SpawnBuilding(BuildingModel model, BoardCoordinate coordinate) 
         {
-            BuildingSpawnData spawnData = GetBuildingSpawnData(buildingType);
+            BuildingSpawnModel spawnModel = GetBuildingSpawnModel(model.BuildingType);
 
-            if (spawnData == null)
+            if (spawnModel == null)
                 return null;
 
-            BuildingControllerBase building = spawnData.Pooler.GetGo<BuildingControllerBase>();
+            BuildingController building = spawnModel.Pooler.GetGo<BuildingController>();
 
             if (building == null)
                 return null;
 
-            building.InitController(spawnData.BuildingData, coordinate);
+            building.InitController(model, coordinate);
             building.gameObject.SetActive(true);
 
             return building;
         }
 
-        private BuildingSpawnData GetBuildingSpawnData(BuildingTypes buildingType) 
+        public IEnumerable<BuildingSpawnModel> GetSpawnModels() 
         {
-            if (spawnDatas == null || spawnDatas.Length < 1)
+            foreach (BuildingSpawnModel model in spawnModels)
+                yield return model;
+
+        }
+
+        private BuildingSpawnModel GetBuildingSpawnModel(BuildingTypes buildingType) 
+        {
+            if (spawnModels == null || spawnModels.Length < 1)
                 return null;
 
-            foreach (BuildingSpawnData data in spawnDatas)
+            foreach (BuildingSpawnModel model in spawnModels)
             {
-                if (data.BuildingType != buildingType)
+                if (model.BuildingType != buildingType)
                     continue;
 
-                return data;
+                return model;
             }
 
             return null;

@@ -9,15 +9,11 @@ namespace Gameplay.BuildingControllerStateMachine
     {
         public Transform transform = null;
         public SpriteRenderer spriteVisual = null;
-        public BuildingControllerBase controller = null;
+        public Transform trVisual = null;
+        public BuildingController controller = null;
 
         [HideInInspector]
         [NonSerialized]
-        public BuildingDataSO buildingData;
-        [NonSerialized]
-        [HideInInspector]
-        public BoardCoordinate coordinate;
-
-        public Color ColorBuilding => buildingData?.BuildingColor ?? Color.white;
+        public BuildingViewModel viewModel;
     }
 }

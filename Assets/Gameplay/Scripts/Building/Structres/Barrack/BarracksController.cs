@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class BarracksController : BuildingControllerBase
+    public class BarracksController : BuildingController
     {
-        public override BuildingTypes BuildingType => BuildingTypes.Barracks;
+        
     }
 }

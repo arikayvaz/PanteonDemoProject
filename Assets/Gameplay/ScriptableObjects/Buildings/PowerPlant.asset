@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43a25a82a14a5bb4e85bf3429169b75b, type: 3}
+  m_Script: {fileID: 11500000, guid: 630467d5d3022424fa957c053a6e5fce, type: 3}
   m_Name: PowerPlant
   m_EditorClassIdentifier: 
+  <BuildingType>k__BackingField: 1
+  <BuildingName>k__BackingField: Power Plant
   <CellSizeX>k__BackingField: 2
   <CellSizeY>k__BackingField: 3
   <Health>k__BackingField: 50
-  <BuildingColor>k__BackingField: {r: 0.7924528, g: 0.5612376, b: 0, a: 1}
+  <SpriteBuilding>k__BackingField: {fileID: 21300000, guid: 939e1ed35dc45ad4e9e1d906b3d51d36, type: 3}
+  <BuildingColor>k__BackingField: {r: 1, g: 0.74167377, b: 0.3443396, a: 1}
   <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}

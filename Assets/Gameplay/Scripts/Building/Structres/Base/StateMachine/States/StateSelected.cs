@@ -13,14 +13,14 @@ namespace Gameplay.BuildingControllerStateMachine
         {
             base.OnEnter(info);
 
-            info.controller.UpdateVisualColor(info.buildingData.StateColorData.ColorSelected);
+            info.controller.UpdateVisualColor(info.viewModel.ColorSelected);
         }
 
         public override void OnExit(StateInfo info)
         {
             base.OnExit(info);
 
-            info.controller.UpdateVisualColor(info.buildingData.BuildingColor);
+            info.controller.UpdateVisualColor(info.viewModel.BuildingColor);
         }
     }
 }

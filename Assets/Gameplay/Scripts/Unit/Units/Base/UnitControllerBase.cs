@@ -168,6 +168,11 @@ namespace Gameplay
             return unit == this;
         }
 
+        public bool IsCoordinateInBounds(BoardCoordinate coordinate)
+        {
+            return false;
+        }
+
         public void Move(BoardCoordinate targetCoordinate)
         {
             stateInfo.targetCoordinate = targetCoordinate;

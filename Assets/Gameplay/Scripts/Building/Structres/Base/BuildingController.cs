@@ -5,13 +5,10 @@ using UnityEngine.UI;
 
 namespace Gameplay
 {
-    public abstract class BuildingControllerBase : MonoBehaviour, IPickable, IPlaceable, ISelectable
+    public abstract class BuildingController : MonoBehaviour, IPickable, IPlaceable, ISelectable
     {
-        public abstract BuildingTypes BuildingType { get; }
-
         public States CurrentState => stateMachine?.State?.StateId ?? States.None;
 
-        [SerializeField] protected Transform trVisual = null;
         [SerializeField] protected StateInfo stateInfo = new StateInfo();
         protected StateMachine stateMachine;
 
@@ -19,13 +16,13 @@ namespace Gameplay
         {
             get 
             {
-                return GameBoardManager.Instance?.GetWorldPositionFromCoordinate(stateInfo.coordinate) ?? Vector2.zero;
+                return GameBoardManager.Instance?.GetWorldPositionFromCoordinate(stateInfo.viewModel.Coordinate) ?? Vector2.zero;
             }
         }
 
-        public virtual void InitController(BuildingDataSO buildingData, BoardCoordinate coordinate) 
+        public virtual void InitController(BuildingModel model, BoardCoordinate coordinate) 
         {
-            stateInfo.buildingData = buildingData;
+            stateInfo.viewModel = new BuildingViewModel(model);
 
             UpdateCoordinate(coordinate);
 
@@ -55,12 +52,12 @@ namespace Gameplay
 
         private void UpdateCoordinate(BoardCoordinate coordinate)
         {
-            stateInfo.coordinate = coordinate;
+            stateInfo.viewModel.UpdateCoordinate(coordinate);
         }
 
         private void SetVisualSize() 
         {
-            trVisual.transform.localScale = new Vector3(stateInfo.buildingData.CellSizeX, stateInfo.buildingData.CellSizeY, 1f);
+            stateInfo.trVisual.transform.localScale = new Vector3(stateInfo.viewModel.CellSizeX, stateInfo.viewModel.CellSizeY, 1f);
         }
 
         private void UpdatePosition() 
@@ -92,19 +89,19 @@ namespace Gameplay
 
             UpdateCoordinate(coordinate);
             UpdatePosition();
-            UpdateVisualColor(stateInfo.ColorBuilding);
+            UpdateVisualColor(stateInfo.viewModel.BuildingColor);
 
             ChangeState(States.Placed);
         }
 
         public IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin)
         {
-            if (stateInfo == null || stateInfo.buildingData == null)
+            if (stateInfo == null || stateInfo.viewModel == null)
                 yield return BoardCoordinate.Invalid;
 
-            for (int y = 0; y < stateInfo.buildingData.CellSizeY; y++)
+            for (int y = 0; y < stateInfo.viewModel.CellSizeY; y++)
             {
-                for (int x = 0; x < stateInfo.buildingData.CellSizeX; x++)
+                for (int x = 0; x < stateInfo.viewModel.CellSizeX; x++)
                 {
                     yield return new BoardCoordinate(origin.x + x, origin.y + y);
                 }
@@ -113,14 +110,14 @@ namespace Gameplay
 
         public IEnumerable<BoardCoordinate> GetPlaceCoordinates()
         {
-            if (stateInfo == null || stateInfo.buildingData == null)
+            if (stateInfo == null || stateInfo.viewModel == null)
                 yield return BoardCoordinate.Invalid;
 
-            for (int y = 0; y < stateInfo.buildingData.CellSizeY; y++)
+            for (int y = 0; y < stateInfo.viewModel.CellSizeY; y++)
             {
-                for (int x = 0; x < stateInfo.buildingData.CellSizeX; x++)
+                for (int x = 0; x < stateInfo.viewModel.CellSizeX; x++)
                 {
-                    yield return new BoardCoordinate(stateInfo.coordinate.x + x, stateInfo.coordinate.y + y);
+                    yield return new BoardCoordinate(stateInfo.viewModel.Coordinate.x + x, stateInfo.viewModel.Coordinate.y + y);
                 }
             }
         }
@@ -142,7 +139,7 @@ namespace Gameplay
 
         public bool IsEqual(ISelectable selectable) 
         {
-            BuildingControllerBase building = selectable as BuildingControllerBase;
+            BuildingController building = selectable as BuildingController;
 
             if (building == null)
                 return false;
@@ -152,12 +149,20 @@ namespace Gameplay
 
         public bool IsEqual(IPlaceable placeable) 
         {
-            BuildingControllerBase building = placeable as BuildingControllerBase;
+            BuildingController building = placeable as BuildingController;
 
             if (building == null)
                 return false;
 
             return building == this;
+        }
+
+        public bool IsCoordinateInBounds(BoardCoordinate coordinate) 
+        {
+            bool isInXBounds = coordinate.x >= stateInfo.viewModel.Coordinate.x && coordinate.x <= stateInfo.viewModel.Coordinate.x;
+            bool isInYBounds = coordinate.y >= stateInfo.viewModel.Coordinate.y && coordinate.y <= stateInfo.viewModel.Coordinate.y;
+
+            return isInXBounds && isInYBounds;
         }
     }
 }

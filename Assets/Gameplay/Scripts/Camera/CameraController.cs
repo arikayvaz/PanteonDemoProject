@@ -7,11 +7,6 @@ namespace Gameplay
     {
         Camera camera;
 
-        private void Start()
-        {
-            InitController();
-        }
-
         public void InitController()
         {
             camera = Camera.main;

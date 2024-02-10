@@ -19,18 +19,6 @@ namespace Gameplay
         [HideInInspector] public UnityEvent<IPlaceable, IEnumerable<BoardCoordinate>> OnObjectPlaced;
         [HideInInspector] public UnityEvent<IPlaceable, BoardCoordinate> OnPlaceObjectUpdated;
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            InitManager();
-        }
-
-        private void Start()
-        {
-            Pathfinder.Instance.InitPathfinder(boardSettings.boardSize.x, boardSettings.boardSize.y);
-        }
-
         public void InitManager()
         {
             InitPlacedObjects();

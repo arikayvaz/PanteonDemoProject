@@ -8,24 +8,22 @@ namespace Gameplay
 {
     public class BuildingManager : Singleton<BuildingManager>, IManager
     {
-        [SerializeField] BuildingSpawnController spawnController = null;
-        [SerializeField] BuildingPickController pickController = null;
-        [SerializeField] BuildingPlaceController placeController = null;
-
-        List<BuildingControllerBase> buildings = null;
-
-        private GameBoardSelectController<BuildingControllerBase> selectController = null;
-
         [HideInInspector]
         public UnityEvent OnBuildingPicked;
 
         [HideInInspector]
         public UnityEvent OnBuildingSelected;
 
-        private void Start()
-        {
-            InitManager();
-        }
+        [SerializeField] BuildingDataSO[] buildingDatas = null;
+
+        [Space]
+        [SerializeField] BuildingSpawnController spawnController = null;
+        [SerializeField] BuildingPickController pickController = null;
+        [SerializeField] BuildingPlaceController placeController = null;
+
+        private GameBoardSelectController<BuildingController> selectController = null;
+
+        List<BuildingController> buildings = null;
 
         protected override void OnDestroy()
         {
@@ -33,7 +31,7 @@ namespace Gameplay
 
             OnBuildingPicked?.RemoveAllListeners();
         }
-
+        /*
         private void Update()
         {
 #warning remove test codes
@@ -73,28 +71,106 @@ namespace Gameplay
                 return;
             }
         }
+        */
 
         public void InitManager()
         {
-            buildings = new List<BuildingControllerBase>();
+            buildings = new List<BuildingController>();
 
             spawnController.InitController();
             pickController.InitController();
             placeController.InitController();
 
-            selectController = new GameBoardSelectController<BuildingControllerBase>();
+            selectController = new GameBoardSelectController<BuildingController>();
             selectController.InitController();
 
             UnitManager.Instance.OnUnitPicked.AddListener(OnUnitPicked);
             UnitManager.Instance.OnUnitSelected.AddListener(OnUnitSelected);
         }
 
+        public bool HandleLeftClickInput(BoardCoordinate coordinate)
+        {
+            bool isCoordinateInBoardBounds = GameBoardManager.Instance.IsCoordinateInBoardBounds(coordinate);
+            bool isCoordinatePlaceable = GameBoardManager.Instance.IsCoordinatePlaceable(coordinate);
+            bool isPlaceSuccess = false;
+            bool isSelectSuccess = false;
+
+            if (pickController.IsPickedBuilding)
+            {
+                if (!isCoordinateInBoardBounds) 
+                {
+                    DropBuilding();
+                    return true;
+                }
+
+                if (!isCoordinatePlaceable)
+                    return true;
+
+                isPlaceSuccess = PlaceBuilding();
+
+                if (isPlaceSuccess)
+                    return true;
+
+                return false;
+            }
+
+            if (selectController.IsSelectedObject)
+            {
+                if (!isCoordinateInBoardBounds)
+                {
+                    DeselectBuilding();
+                    return true;
+                }
+
+                if (isCoordinatePlaceable)
+                {
+                    DeselectBuilding();
+                    return true;
+                }
+
+                BuildingController selectedBuilding = selectController.GetSelectedObject();
+                IPlaceable inputPlaceable = GameBoardManager.Instance.GetPlacedObject(coordinate);
+
+                if (selectedBuilding.IsEqual(inputPlaceable) && selectedBuilding.IsCoordinateInBounds(coordinate))
+                    return false;
+
+                isSelectSuccess = SelectBuilding(coordinate);
+
+                if (isSelectSuccess)
+                    return true;
+
+                return false;
+            }
+
+            if (!isCoordinateInBoardBounds)
+                return false;
+
+            if (isCoordinatePlaceable)
+                return false;
+
+            isSelectSuccess = SelectBuilding(coordinate);
+
+            if (isSelectSuccess)
+                return true;
+
+            return false;
+        }
+
+        #region Pick
+
         public void PickBuilding(BuildingTypes buildingType) 
         {
             if (pickController.IsPickedBuilding)
                 pickController.DropObject();
 
-            BuildingControllerBase building = spawnController.SpawnBuildingForPicking(buildingType);
+            BuildingDataSO buildingData = GetBuildingData(buildingType);
+
+            if (buildingData == null)
+                return;
+
+            BuildingModel model = new BuildingModel(buildingData);
+
+            BuildingController building = spawnController.SpawnBuildingForPicking(model);
 
             if (building == null)
                 return;
@@ -109,21 +185,27 @@ namespace Gameplay
             pickController.DropObject();
         }
 
-        public void PlaceBuilding() 
-        {
-            if (!pickController.IsPickedBuilding)
-                return;
+        #endregion
 
+        #region Place
+
+        public bool PlaceBuilding() 
+        {
             bool isPlacingSuccess = placeController.PlaceBuilding(pickController.PickedBuilding);
 
             if (isPlacingSuccess)
                 pickController.DropObject();
 
+            return isPlacingSuccess;
         }
 
-        public void SpawnBuilding(BuildingTypes buildingType, BoardCoordinate coordinate) 
+        #endregion
+
+        #region Spawn
+
+        public void SpawnBuilding(BuildingModel model, BoardCoordinate coordinate) 
         {
-            BuildingControllerBase building = spawnController.SpawnBuilding(buildingType, coordinate);
+            BuildingController building = spawnController.SpawnBuilding(model, coordinate);
 
             if (building == null)
                 return;
@@ -131,12 +213,18 @@ namespace Gameplay
             AddBuilding(building);
         }
 
-        public void SelectBuilding(BoardCoordinate coordinate) 
+        #endregion
+
+        #region Select
+
+        public bool SelectBuilding(BoardCoordinate coordinate) 
         {
             bool isSelectionSuccess = selectController.SelectObject(coordinate);
 
             if (isSelectionSuccess)
                 OnBuildingSelected?.Invoke();
+
+            return isSelectionSuccess;
         }
 
         public void DeselectBuilding() 
@@ -144,7 +232,10 @@ namespace Gameplay
             selectController.DeselectObject();
         }
 
-        private void AddBuilding(BuildingControllerBase building) 
+        #endregion
+
+        #region Add & Delete
+        private void AddBuilding(BuildingController building) 
         {
             if (buildings.Contains(building))
                 return;
@@ -152,12 +243,24 @@ namespace Gameplay
             buildings.Add(building);
         }
 
-        private void DeleteBuilding(BuildingControllerBase building) 
+        private void DeleteBuilding(BuildingController building) 
         {
             if (buildings.Count < 1 || !buildings.Contains(building))
                 return;
 
             buildings.Remove(building);
+        }
+
+        #endregion
+
+        public IEnumerable<BuildingDataSO> GetBuildingDatas() 
+        {
+            if (buildingDatas?.Length < 1)
+                yield return null;
+
+            foreach (BuildingDataSO data in buildingDatas)
+                yield return data;
+
         }
 
         private void OnUnitPicked() 
@@ -168,6 +271,20 @@ namespace Gameplay
         private void OnUnitSelected() 
         {
             DeselectBuilding();
+        }
+        
+        private BuildingDataSO GetBuildingData(BuildingTypes buildingType) 
+        {
+            if (buildingDatas?.Length < 1)
+                return null;
+
+            foreach (BuildingDataSO data in buildingDatas)
+            {
+                if (data.BuildingType == buildingType)
+                    return data;
+            }
+
+            return null;
         }
     }
 }
