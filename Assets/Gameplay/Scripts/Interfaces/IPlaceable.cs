@@ -9,5 +9,7 @@ namespace Gameplay
 
         IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin);
         IEnumerable<BoardCoordinate> GetPlaceCoordinates();
+
+        bool IsEqual(IPlaceable placeable);
     }
 }

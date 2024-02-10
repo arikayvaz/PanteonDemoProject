@@ -2,6 +2,7 @@ using Common;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gameplay
 {
@@ -14,6 +15,9 @@ namespace Gameplay
         [SerializeField] GameObject goCell = null;
 
         private IPlaceable[,] placedObjects = null;
+
+        [HideInInspector] public UnityEvent<IPlaceable, IEnumerable<BoardCoordinate>> OnObjectPlaced;
+        [HideInInspector] public UnityEvent<IPlaceable, BoardCoordinate> OnPlaceObjectUpdated;
 
         protected override void Awake()
         {
@@ -69,18 +73,12 @@ namespace Gameplay
 
         public void OnBuildingPlaced(IPlaceable placedObject, IEnumerable<BoardCoordinate> coordinates) 
         {
-            foreach (BoardCoordinate coordinate in coordinates)
-            {
-                AddPlacedObject(placedObject, coordinate);
-            }
+            PlaceObject(placedObject, coordinates);
         }
 
         public void OnUnitPlaced(IPlaceable placedObject, IEnumerable<BoardCoordinate> coordinates) 
         {
-            foreach (BoardCoordinate coordinate in coordinates)
-            {
-                AddPlacedObject(placedObject, coordinate);
-            }
+            PlaceObject(placedObject, coordinates);
         }
 
         public BoardCoordinate GetCoordinateFromWorldPosition(Vector3 worldPosition) 
@@ -94,6 +92,14 @@ namespace Gameplay
             coordinate.y = fixedY < 0 ? -1 : Mathf.RoundToInt(fixedY / BoardSettings.cellSize);
 
             return coordinate;
+        }
+
+        private void PlaceObject(IPlaceable placedObject, IEnumerable<BoardCoordinate> coordinates) 
+        {
+            foreach (BoardCoordinate coordinate in coordinates)
+                AddPlacedObject(placedObject, coordinate);
+
+            OnObjectPlaced?.Invoke(placedObject, coordinates);
         }
 
         public IPlaceable GetPlacedObject(BoardCoordinate coordinate) 
@@ -122,6 +128,7 @@ namespace Gameplay
 
             RemovePlacedObject(oldCoordinate);
             AddPlacedObject(placeable, newCoordinate);
+            OnPlaceObjectUpdated?.Invoke(placeable, newCoordinate);
             return true;
         }
 

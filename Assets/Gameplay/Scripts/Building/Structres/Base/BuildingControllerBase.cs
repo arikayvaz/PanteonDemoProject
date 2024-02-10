@@ -1,6 +1,7 @@
 using Gameplay.BuildingControllerStateMachine;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Gameplay
 {
@@ -142,6 +143,16 @@ namespace Gameplay
         public bool IsEqual(ISelectable selectable) 
         {
             BuildingControllerBase building = selectable as BuildingControllerBase;
+
+            if (building == null)
+                return false;
+
+            return building == this;
+        }
+
+        public bool IsEqual(IPlaceable placeable) 
+        {
+            BuildingControllerBase building = placeable as BuildingControllerBase;
 
             if (building == null)
                 return false;

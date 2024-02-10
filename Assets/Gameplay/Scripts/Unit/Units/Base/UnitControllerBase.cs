@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Gameplay.UnitControllerStateMachine;
 using System.Collections;
+using UnityEngine.UI;
 
 namespace Gameplay
 {
@@ -112,6 +113,11 @@ namespace Gameplay
             StartCoroutine(enumerator);
         }
 
+        public void TerminateCoroutine(IEnumerator enumerator) 
+        {
+            StopCoroutine(enumerator);
+        }
+
         private void SetVisualSize()
         {
             stateInfo.trVisual.localScale = new Vector3(stateInfo.unitData.CellSizeX, stateInfo.unitData.CellSizeY, 1f);
@@ -145,6 +151,16 @@ namespace Gameplay
         public bool IsEqual(ISelectable selectable) 
         {
             UnitControllerBase unit = selectable as UnitControllerBase;
+
+            if (unit == null)
+                return false;
+
+            return unit == this;
+        }
+
+        public bool IsEqual(IPlaceable placeable) 
+        {
+            UnitControllerBase unit = placeable as UnitControllerBase;
 
             if (unit == null)
                 return false;
