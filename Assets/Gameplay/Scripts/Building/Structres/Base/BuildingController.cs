@@ -2,6 +2,7 @@ using Gameplay.BuildingControllerStateMachine;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Profiling.HierarchyFrameDataView;
 
 namespace Gameplay
 {
@@ -13,12 +14,27 @@ namespace Gameplay
         protected StateMachine stateMachine;
 
         public BuildingViewModel ViewModel => stateInfo?.viewModel;
+        public BoardCoordinate SpawnPointCoordinate 
+        {
+            get 
+            {
+                return ViewModel.IsProduceUnits ? (stateInfo?.spawnPoint?.SpawnCoordinate ?? BoardCoordinate.Invalid) : BoardCoordinate.Invalid;
+            }
+        }
 
         public Vector2 Position 
         {
             get 
             {
                 return GameBoardManager.Instance?.GetWorldPositionFromCoordinate(stateInfo.viewModel.Coordinate) ?? Vector2.zero;
+            }
+        }
+
+        public Vector2 SpawnPointPosition 
+        {
+            get 
+            {
+                return GameBoardManager.Instance?.GetWorldPositionFromCoordinate(stateInfo?.spawnPoint?.SpawnCoordinate ?? BoardCoordinate.Invalid) ?? Vector2.zero;
             }
         }
 
@@ -30,13 +46,21 @@ namespace Gameplay
 
             InitStateMachine();
 
-            SetVisualSize();
+            InitBoardVisual();
             UpdatePosition();
+
+            if (stateInfo.viewModel.IsProduceUnits)
+            {
+                stateInfo.spawnPoint.InitSpawnPoint(stateInfo.viewModel.SpawnPointCoordinate
+                , 1
+                , 1
+                , GameBoardManager.BoardSettings.CellSize);
+            }
         }
 
         public void UpdateVisualColor(Color colorUpdated) 
         {
-            stateInfo.spriteVisual.color = colorUpdated;
+            stateInfo.boardVisual.UpdateColor(colorUpdated);
         }
 
         private void ChangeState(States stateNew) 
@@ -57,9 +81,13 @@ namespace Gameplay
             stateInfo.viewModel.UpdateCoordinate(coordinate);
         }
 
-        private void SetVisualSize() 
+        private void InitBoardVisual() 
         {
-            stateInfo.trVisual.transform.localScale = new Vector3(stateInfo.viewModel.CellSizeX, stateInfo.viewModel.CellSizeY, 1f);
+            stateInfo.boardVisual.InitVisual(stateInfo.viewModel.SpriteBuilding
+                , stateInfo.viewModel.BuildingColor
+                , stateInfo.viewModel.CellSizeX
+                , stateInfo.viewModel.CellSizeY
+                , GameBoardManager.BoardSettings.CellSize);
         }
 
         private void UpdatePosition() 
@@ -96,7 +124,7 @@ namespace Gameplay
             ChangeState(States.Placed);
         }
 
-        public IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin)
+        public IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin, bool includeSpawnPoint = false)
         {
             if (stateInfo == null || stateInfo.viewModel == null)
                 yield return BoardCoordinate.Invalid;
@@ -108,30 +136,36 @@ namespace Gameplay
                     yield return new BoardCoordinate(origin.x + x, origin.y + y);
                 }
             }
+
+
+            if (includeSpawnPoint && stateInfo.viewModel.IsProduceUnits)
+                yield return new BoardCoordinate(origin.x + stateInfo.viewModel.SpawnPointOffsetCoordinate.x, origin.y + stateInfo.viewModel.SpawnPointOffsetCoordinate.y);
+            
         }
 
-        public IEnumerable<BoardCoordinate> GetPlaceCoordinates()
+        public IEnumerable<BoardCoordinate> GetPlaceCoordinates(bool includeSpawnPoint = false)
         {
-            if (stateInfo == null || stateInfo.viewModel == null)
-                yield return BoardCoordinate.Invalid;
-
-            for (int y = 0; y < stateInfo.viewModel.CellSizeY; y++)
-            {
-                for (int x = 0; x < stateInfo.viewModel.CellSizeX; x++)
-                {
-                    yield return new BoardCoordinate(stateInfo.viewModel.Coordinate.x + x, stateInfo.viewModel.Coordinate.y + y);
-                }
-            }
+            return GetPlaceCoordinates(stateInfo.viewModel.Coordinate, includeSpawnPoint);
         }
 
         public void Select()
         {
             ChangeState(States.Selected);
+
+            GameUIController.Instance.ShowBuildingInformationPanel(ViewModel.Name, ViewModel.SpriteBuilding, ViewModel.BuildingColor);
+
+            if (ViewModel.IsProduceUnits)
+                UnitManager.Instance.ShowProducibleUnitInformation(ViewModel.GetProducibleUnits());
         }
 
         public void Deselect()
         {
             ChangeState(States.Placed);
+
+            GameUIController.Instance.HideBuildingInformationPanel();
+            
+            if (ViewModel.IsProduceUnits)
+                GameUIController.Instance.HideProducibleUnitInformationPanel();
         }
 
         public bool CanSelect() 

@@ -15,7 +15,7 @@ namespace Gameplay
 
         public BuildingController SpawnBuildingForPicking(BuildingModel model) 
         {
-            return SpawnBuilding(model, BoardCoordinate.Invalid);
+            return SpawnBuilding(model, new BoardCoordinate(0, 0));
         }
 
         public BuildingController SpawnBuilding(BuildingModel model, BoardCoordinate coordinate) 

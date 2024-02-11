@@ -45,6 +45,8 @@ namespace Gameplay
 
             if (isHandled)
                 return;
+
+            isHandled = UnitManager.Instance.HandleLeftClickInput(coordinate);
         }
 
         private BoardCoordinate GetCoordinateFromInputPosition(Vector2 inputPos) 
@@ -56,8 +58,8 @@ namespace Gameplay
             int fixedX = Mathf.CeilToInt(worldPos.x);
             int fixedY = Mathf.CeilToInt(worldPos.y);
 
-            coord.x = Mathf.RoundToInt(fixedX / GameBoardManager.BoardSettings.cellSize);
-            coord.y = Mathf.RoundToInt(fixedY / GameBoardManager.BoardSettings.cellSize);
+            coord.x = Mathf.RoundToInt(fixedX / GameBoardManager.BoardSettings.CellSize);
+            coord.y = Mathf.RoundToInt(fixedY / GameBoardManager.BoardSettings.CellSize);
 
             return coord;
         }

@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5211dc541e1e4624ab65f305200e2934, type: 3}
   m_Name: GameBoardSettings
   m_EditorClassIdentifier: 
-  boardSize: {x: 10, y: 10}
+  <BoardSize>k__BackingField: {x: 10, y: 10}
+  <CellSize>k__BackingField: 32
+  <BoardSortingOrderGround>k__BackingField: 0
+  <BoardSortingOrderSpawnPoint>k__BackingField: 1
+  <BoardSortingOrderPlaced>k__BackingField: 2
+  <BoardSortingOrderPicked>k__BackingField: 3

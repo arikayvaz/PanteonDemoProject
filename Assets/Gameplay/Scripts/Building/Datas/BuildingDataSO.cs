@@ -15,5 +15,7 @@ namespace Gameplay
         [field: SerializeField] public StateColorDataSO StateColorData { get; private set; } = null;
         public UnitTypes[] producibleUnits = null;
         public bool IsProduceUnits => producibleUnits?.Length > 0;
+        [field: SerializeField] public int SpawnPointCoordinateOffsetX { get; private set; } = 0;
+        [field: SerializeField] public int SpawnPointCoordinateOffsetY { get; private set; } = 0;
     }
 }

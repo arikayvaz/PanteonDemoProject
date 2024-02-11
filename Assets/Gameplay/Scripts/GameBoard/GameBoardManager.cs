@@ -27,14 +27,14 @@ namespace Gameplay
 
         public Vector2 GetWorldPositionFromCoordinate(BoardCoordinate coordinate) 
         {
-            return new Vector2(coordinate.x * BoardSettings.cellSize, coordinate.y * BoardSettings.cellSize);
+            return new Vector2(coordinate.x * BoardSettings.CellSize, coordinate.y * BoardSettings.CellSize);
         }
 
         public bool IsCoordinateInBoardBounds(BoardCoordinate coordinate) 
         {
             return BoardCoordinate.IsValid(coordinate)
-                && coordinate.x < BoardSettings.boardSize.x
-                && coordinate.y < BoardSettings.boardSize.y;
+                && coordinate.x < BoardSettings.BoardSize.x
+                && coordinate.y < BoardSettings.BoardSize.y;
         }
 
         public bool IsCoordinatesPlaceable(IEnumerable<BoardCoordinate> coordinates) 
@@ -76,8 +76,8 @@ namespace Gameplay
             int fixedX = Mathf.CeilToInt(worldPosition.x);
             int fixedY = Mathf.CeilToInt(worldPosition.y);
 
-            coordinate.x = fixedX < 0 ? -1 : Mathf.RoundToInt(fixedX / BoardSettings.cellSize);
-            coordinate.y = fixedY < 0 ? -1 : Mathf.RoundToInt(fixedY / BoardSettings.cellSize);
+            coordinate.x = fixedX < 0 ? -1 : Mathf.RoundToInt(fixedX / BoardSettings.CellSize);
+            coordinate.y = fixedY < 0 ? -1 : Mathf.RoundToInt(fixedY / BoardSettings.CellSize);
 
             return coordinate;
         }
@@ -122,7 +122,7 @@ namespace Gameplay
 
         private void InitPlacedObjects() 
         {
-            placedObjects = new IPlaceable[boardSettings.boardSize.x, boardSettings.boardSize.y];
+            placedObjects = new IPlaceable[boardSettings.BoardSize.x, boardSettings.BoardSize.y];
         }
 
         private void AddPlacedObject(IPlaceable placedObject, BoardCoordinate coordinate)
@@ -157,11 +157,11 @@ namespace Gameplay
 
         private void SpawnBoardCells() 
         {
-            for (int y = 0; y < boardSettings.boardSize.y; y++)
+            for (int y = 0; y < boardSettings.BoardSize.y; y++)
             {
-                for (int x = 0; x < boardSettings.boardSize.x; x++)
+                for (int x = 0; x < boardSettings.BoardSize.x; x++)
                 {
-                    Vector2 pos = new Vector2(x, y) * boardSettings.cellSize;
+                    Vector2 pos = new Vector2(x, y) * boardSettings.CellSize;
                     GameObject cell = Instantiate(goCell, pos, Quaternion.identity);
                     cell.name = $"Cell_({x},{y})";
 

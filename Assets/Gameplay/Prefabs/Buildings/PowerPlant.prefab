@@ -104,21 +104,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateInfo:
     transform: {fileID: 5492703009445942786}
-    spriteVisual: {fileID: 5492703011012146846}
-    trVisual: {fileID: 5492703009645369636}
     controller: {fileID: 1917533438712953211}
+    boardVisual: {fileID: 8891581047384436764}
+    spawnPoint: {fileID: 0}
 --- !u!4 &5492703009445942786 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2653939379207005123, guid: 46d04378b2e396840a19425f5dc6fb37, type: 3}
   m_PrefabInstance: {fileID: 7561173810027918785}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &5492703009645369636 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2653939379006008549, guid: 46d04378b2e396840a19425f5dc6fb37, type: 3}
+--- !u!114 &8891581047384436764 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1408380243781256669, guid: 46d04378b2e396840a19425f5dc6fb37, type: 3}
   m_PrefabInstance: {fileID: 7561173810027918785}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &5492703011012146846 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 2653939377640276831, guid: 46d04378b2e396840a19425f5dc6fb37, type: 3}
-  m_PrefabInstance: {fileID: 7561173810027918785}
-  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 417e2529f54bf2648b3d7665521fadf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

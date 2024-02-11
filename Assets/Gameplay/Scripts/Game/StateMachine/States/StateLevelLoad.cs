@@ -19,7 +19,7 @@ namespace Gameplay.GameManagerStateMachine
 
             InputManager.Instance.InitManager();
 
-            Pathfinder.Instance.InitPathfinder(GameBoardManager.BoardSettings.boardSize.x, GameBoardManager.BoardSettings.boardSize.y);
+            Pathfinder.Instance.InitPathfinder(GameBoardManager.BoardSettings.BoardSize.x, GameBoardManager.BoardSettings.BoardSize.y);
 
             BuildingManager.Instance.InitManager();
             UnitManager.Instance.InitManager();

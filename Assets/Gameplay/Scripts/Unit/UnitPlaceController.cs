@@ -10,18 +10,15 @@ namespace Gameplay
             
         }
 
-        public bool PlaceUnit(UnitController unit)
+        public bool PlaceUnit(UnitController unit, BoardCoordinate placeCoordinate)
         {
-            Vector2 inputWorldPos = InputManager.Instance.WorldPosition;
-            BoardCoordinate placeCoord = GameBoardManager.Instance.GetCoordinateFromWorldPosition(inputWorldPos);
-
-            if (!GameBoardManager.Instance.IsCoordinatePlaceable(placeCoord))
+            if (!GameBoardManager.Instance.IsCoordinatePlaceable(placeCoordinate))
                 return false;
 
-            if (!GameBoardManager.Instance.IsCoordinatesPlaceable(unit.GetPlaceCoordinates(placeCoord)))
+            if (!GameBoardManager.Instance.IsCoordinatesPlaceable(unit.GetPlaceCoordinates(placeCoordinate)))
                 return false;
 
-            unit.Place(placeCoord);
+            unit.Place(placeCoordinate);
             GameBoardManager.Instance.OnUnitPlaced(unit, unit.GetPlaceCoordinates());
             return true;
         }

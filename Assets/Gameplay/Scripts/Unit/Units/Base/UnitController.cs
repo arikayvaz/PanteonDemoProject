@@ -64,7 +64,7 @@ namespace Gameplay
             ChangeState(States.Placed);
         }
 
-        public IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin)
+        public IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin, bool includeSpawnPoint = false)
         {
             if (stateInfo == null || stateInfo.viewModel == null)
                 yield return BoardCoordinate.Invalid;
@@ -78,8 +78,10 @@ namespace Gameplay
             }
         }
 
-        public IEnumerable<BoardCoordinate> GetPlaceCoordinates()
+        public IEnumerable<BoardCoordinate> GetPlaceCoordinates(bool includeSpawnPoint = false)
         {
+            return GetPlaceCoordinates(stateInfo.viewModel.Coordinate);
+            /*
             if (stateInfo == null || stateInfo.viewModel == null)
                 yield return BoardCoordinate.Invalid;
 
@@ -90,6 +92,7 @@ namespace Gameplay
                     yield return new BoardCoordinate(stateInfo.viewModel.Coordinate.x + x, stateInfo.viewModel.Coordinate.y + y);
                 }
             }
+            */
         }
 
         private void InitStateMachine()

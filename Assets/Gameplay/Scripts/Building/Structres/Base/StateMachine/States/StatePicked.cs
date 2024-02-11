@@ -17,9 +17,14 @@ namespace Gameplay.BuildingControllerStateMachine
         {
             base.OnEnter(info);
 
+            stateInfo = info;
+
             UpdatePosition(info);
 
-            stateInfo = info;
+            info.boardVisual.UpdateSortingOrder(GameBoardManager.BoardSettings.BoardSortingOrderPicked);
+
+            if (info.viewModel.IsProduceUnits)
+                info.spawnPoint.OnPicked();
 
             OnInputCoordinateChanged(InputManager.Instance.CurrentInputCoordinate);
             InputManager.Instance.OnInputCoordinateChange += OnInputCoordinateChanged;
@@ -48,10 +53,14 @@ namespace Gameplay.BuildingControllerStateMachine
 
         private void OnInputCoordinateChanged(BoardCoordinate updatedCoordinate) 
         {
-            bool isCoordinatePlaceable = GameBoardManager.Instance.IsCoordinatesPlaceable(stateInfo.controller.GetPlaceCoordinates(updatedCoordinate));
+            bool isCoordinatePlaceable = GameBoardManager.Instance.IsCoordinatesPlaceable(stateInfo.controller.GetPlaceCoordinates(updatedCoordinate, true));
             Color visualColor = isCoordinatePlaceable ? stateInfo.viewModel.ColorPlaceable : stateInfo.viewModel.ColorUnplaceable;
-
+            
             stateInfo.controller.UpdateVisualColor(visualColor);
+            
+            if (stateInfo.viewModel.IsProduceUnits)
+                stateInfo.spawnPoint.UpdateColor(visualColor);
+
         }
     }
 }

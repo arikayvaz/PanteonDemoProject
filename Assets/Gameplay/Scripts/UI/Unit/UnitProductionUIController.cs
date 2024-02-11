@@ -44,7 +44,9 @@ namespace Gameplay
 
         private void OnItemClick(UnitTypes unitType) 
         {
-            UnitManager.Instance.SpawnUnit(unitType, new BoardCoordinate(0, 0));
+            BoardCoordinate spawnCoordinate = BuildingManager.Instance.GetSelectedBuildingSpawnCoordinate();
+
+            UnitManager.Instance.ProduceUnit(unitType, spawnCoordinate);
         }
 
         private void InitItems(IEnumerable<UnitDataSO> producibleUnitDatas) 

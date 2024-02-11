@@ -33,6 +33,11 @@ namespace Gameplay
             return x == c.x && y == c.y;
         }
 
+        public override int GetHashCode()
+        {
+            return (x + y).GetHashCode();
+        }
+
         public static bool operator ==(BoardCoordinate c1, BoardCoordinate c2) 
         {
             return c1.Equals(c2);
@@ -41,6 +46,11 @@ namespace Gameplay
         public static bool operator !=(BoardCoordinate c1, BoardCoordinate c2)
         {
             return !c1.Equals(c2);
+        }
+
+        public static BoardCoordinate operator +(BoardCoordinate c1, BoardCoordinate c2) 
+        {
+            return new BoardCoordinate(c1.x + c2.x, c1.y + c2.y);
         }
     }
 }

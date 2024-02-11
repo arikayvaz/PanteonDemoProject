@@ -20,6 +20,9 @@ namespace Gameplay
 
         public bool IsProduceUnits => model.IsProduceUnits;
 
+        public BoardCoordinate SpawnPointCoordinate => model.SpawnPointCoordinate;
+        public BoardCoordinate SpawnPointOffsetCoordinate => model.SpawnPointOffsetCoordinate;
+
         public BuildingViewModel(BuildingModel model)
         {
             this.model = model;

@@ -11,9 +11,9 @@ namespace Gameplay
         {
             camera = Camera.main;
 
-            InitCamera(GameBoardManager.BoardSettings.boardSize.x
-                , GameBoardManager.BoardSettings.boardSize.y
-                , GameBoardManager.BoardSettings.cellSize
+            InitCamera(GameBoardManager.BoardSettings.BoardSize.x
+                , GameBoardManager.BoardSettings.BoardSize.y
+                , GameBoardManager.BoardSettings.CellSize
                 , GameUIController.Instance.GameViewStartPct
                 , GameUIController.Instance.GameViewEndPct);
         }

@@ -34,58 +34,6 @@ namespace Gameplay
             OnUnitPicked?.RemoveAllListeners();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                PickUnit(UnitTypes.Soldier00);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                PickUnit(UnitTypes.Soldier01);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Y))
-            {
-                PickUnit(UnitTypes.Soldier02);
-                return;
-            }
-
-
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                DropUnit();
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                PlaceUnit();
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                SelectUnit(InputManager.Instance.CurrentInputCoordinate);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                DeselectUnit();
-                return;
-            }
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                HandleUnitCommand(InputManager.Instance.CurrentInputCoordinate);
-                return;
-            }
-        }
-
         public void InitManager()
         {
             units = new List<UnitController>();
@@ -99,6 +47,49 @@ namespace Gameplay
 
             BuildingManager.Instance.OnBuildingPicked.AddListener(OnBuildingPicked);
             BuildingManager.Instance.OnBuildingSelected.AddListener(OnBuildingSelected);
+        }
+
+        public bool HandleLeftClickInput(BoardCoordinate coordinate) 
+        {
+            bool isCoordinateInBoardBounds = GameBoardManager.Instance.IsCoordinateInBoardBounds(coordinate);
+            bool isCoordinatePlaceable = GameBoardManager.Instance.IsCoordinatePlaceable(coordinate);
+
+            if (selectController.IsSelectedObject)
+            {
+                if (!isCoordinateInBoardBounds) 
+                {
+                    DeselectUnit();
+                    return false;
+                }
+
+                if (isCoordinatePlaceable) 
+                {
+                    MoveToCoordinate(coordinate);
+                    return true;
+                }
+
+                bool isAttackSuccess = Attack(coordinate);
+
+                return isAttackSuccess;
+            }
+
+            if (!isCoordinateInBoardBounds || isCoordinatePlaceable)
+                return false;
+
+            IPlaceable placeable = GameBoardManager.Instance.GetPlacedObject(coordinate);
+
+            if (!IsPlaceableValid(placeable))
+                return false;
+
+            bool isSelectSuccess = SelectUnit(coordinate);
+
+            return isSelectSuccess;
+        }
+
+        public void ProduceUnit(UnitTypes unitType, BoardCoordinate coordinate) 
+        {
+            PickUnit(unitType, coordinate);
+            PlaceUnit(coordinate);
         }
 
         #region Spawning
@@ -123,7 +114,7 @@ namespace Gameplay
         #endregion
 
         #region Picking
-        public void PickUnit(UnitTypes unitType)
+        public void PickUnit(UnitTypes unitType, BoardCoordinate coordinate)
         {
             if (pickController.IsPickedUnit)
                 pickController.DropObject();
@@ -135,7 +126,7 @@ namespace Gameplay
 
             UnitModel model = new UnitModel(unitData);
 
-            UnitController unit = spawnController.SpawnUnitForPicking(model);
+            UnitController unit = spawnController.SpawnUnit(model, coordinate);
 
             if (unit == null)
                 return;
@@ -154,12 +145,12 @@ namespace Gameplay
 
         #region Placing
 
-        public void PlaceUnit()
+        public void PlaceUnit(BoardCoordinate placeCoordinate)
         {
             if (!pickController.IsPickedUnit)
                 return;
 
-            bool isPlacingSuccess = placeController.PlaceUnit(pickController.PickedUnit);
+            bool isPlacingSuccess = placeController.PlaceUnit(pickController.PickedUnit, placeCoordinate);
 
             if (isPlacingSuccess)
                 pickController.DropObject();
@@ -170,12 +161,14 @@ namespace Gameplay
 
         #region Selecting
 
-        public void SelectUnit(BoardCoordinate coordinate) 
+        public bool SelectUnit(BoardCoordinate coordinate) 
         {
             bool isSelectSuccess = selectController.SelectObject(coordinate);
 
             if (isSelectSuccess)
                 OnUnitSelected?.Invoke();
+
+            return isSelectSuccess;
         }
 
         public void DeselectUnit() 
@@ -212,22 +205,6 @@ namespace Gameplay
                 return;
 
             GameUIController.Instance.ShowProducibleUnitInformationPanel(unitDatas);
-        }
-
-        private void HandleUnitCommand(BoardCoordinate coordinate) 
-        {
-            if (!selectController.IsSelectedObject)
-                return;
-
-            if (!GameBoardManager.Instance.IsCoordinateInBoardBounds(coordinate))
-                return;
-
-            bool isAttackingSuccess = Attack(coordinate);
-
-            if (isAttackingSuccess)
-                return;
-
-            MoveToCoordinate(coordinate);
         }
 
         private bool Attack(BoardCoordinate coordinate) 
@@ -281,6 +258,11 @@ namespace Gameplay
 
                 yield return data;
             }
+        }
+
+        private bool IsPlaceableValid(IPlaceable placeable) 
+        {
+            return (placeable as UnitController) != null;
         }
     }
 }

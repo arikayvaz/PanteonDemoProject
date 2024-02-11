@@ -21,3 +21,5 @@ MonoBehaviour:
   <BuildingColor>k__BackingField: {r: 0.08821006, g: 0.3490566, b: 0.03457636, a: 1}
   <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}
   producibleUnits: 000000000100000002000000
+  <SpawnPointCoordinateOffsetX>k__BackingField: 0
+  <SpawnPointCoordinateOffsetY>k__BackingField: -1

@@ -14,6 +14,9 @@ namespace Gameplay
         public UnitTypes[] ProducibleUnits => buildingData.producibleUnits;
         public bool IsProduceUnits => buildingData.IsProduceUnits;
 
+        public BoardCoordinate SpawnPointCoordinate => coordinate + SpawnPointOffsetCoordinate;
+        public BoardCoordinate SpawnPointOffsetCoordinate => new BoardCoordinate(buildingData.SpawnPointCoordinateOffsetX, buildingData.SpawnPointCoordinateOffsetY);
+
         public int health = 0;
         public BoardCoordinate coordinate = BoardCoordinate.Invalid;
 

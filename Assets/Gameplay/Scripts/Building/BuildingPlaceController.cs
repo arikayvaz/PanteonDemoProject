@@ -18,11 +18,11 @@ namespace Gameplay
             if (!GameBoardManager.Instance.IsCoordinatePlaceable(placeCoord))
                 return false;
 
-            if (!GameBoardManager.Instance.IsCoordinatesPlaceable(building.GetPlaceCoordinates(placeCoord)))
+            if (!GameBoardManager.Instance.IsCoordinatesPlaceable(building.GetPlaceCoordinates(placeCoord, true)))
                 return false;
 
             building.Place(placeCoord);
-            GameBoardManager.Instance.OnBuildingPlaced(building, building.GetPlaceCoordinates());
+            GameBoardManager.Instance.OnBuildingPlaced(building, building.GetPlaceCoordinates(false));
             return true;
         }
     }

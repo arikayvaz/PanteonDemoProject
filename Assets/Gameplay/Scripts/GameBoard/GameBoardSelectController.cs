@@ -1,6 +1,7 @@
 using Common;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gameplay
 {

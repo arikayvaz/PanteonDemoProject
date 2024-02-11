@@ -8,9 +8,9 @@ namespace Gameplay.BuildingControllerStateMachine
     public class StateInfo : GenericStateInfo
     {
         public Transform transform = null;
-        public SpriteRenderer spriteVisual = null;
-        public Transform trVisual = null;
         public BuildingController controller = null;
+        public BoardVisual boardVisual = null;
+        public SpawnPoint spawnPoint = null;
 
         [HideInInspector]
         [NonSerialized]

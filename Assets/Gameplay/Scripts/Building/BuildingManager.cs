@@ -59,18 +59,15 @@ namespace Gameplay
                 if (!isCoordinateInBoardBounds) 
                 {
                     DropBuilding();
-                    return true;
+                    return false;
                 }
 
                 if (!isCoordinatePlaceable)
-                    return true;
+                    return false;
 
                 isPlaceSuccess = PlaceBuilding();
 
-                if (isPlaceSuccess)
-                    return true;
-
-                return false;
+                return isPlaceSuccess;
             }
 
             if (selectController.IsSelectedObject)
@@ -78,13 +75,13 @@ namespace Gameplay
                 if (!isCoordinateInBoardBounds)
                 {
                     DeselectBuilding();
-                    return true;
+                    return false;
                 }
 
                 if (isCoordinatePlaceable)
                 {
                     DeselectBuilding();
-                    return true;
+                    return false;
                 }
 
                 BuildingController selectedBuilding = selectController.GetSelectedObject();
@@ -93,26 +90,33 @@ namespace Gameplay
                 if (selectedBuilding.IsEqual(inputPlaceable) && selectedBuilding.IsCoordinateInBounds(coordinate))
                     return false;
 
+                if (!IsPlaceableValid(inputPlaceable))
+                    return false;
+
                 isSelectSuccess = SelectBuilding(coordinate);
 
-                if (isSelectSuccess)
-                    return true;
-
-                return false;
+                return isSelectSuccess;
             }
 
-            if (!isCoordinateInBoardBounds)
+            if (!isCoordinateInBoardBounds || isCoordinatePlaceable)
                 return false;
 
-            if (isCoordinatePlaceable)
+            IPlaceable placeable = GameBoardManager.Instance.GetPlacedObject(coordinate);
+
+            if (!IsPlaceableValid(placeable))
                 return false;
 
             isSelectSuccess = SelectBuilding(coordinate);
 
-            if (isSelectSuccess)
-                return true;
+            return isSelectSuccess;
+        }
 
-            return false;
+        public BoardCoordinate GetSelectedBuildingSpawnCoordinate() 
+        {
+            if (!selectController.IsSelectedObject)
+                return BoardCoordinate.Invalid;
+
+            return selectController.GetSelectedObject().SpawnPointCoordinate;
         }
 
         #region Pick
@@ -186,7 +190,6 @@ namespace Gameplay
             if (isSelectionSuccess) 
             {
                 OnBuildingSelected?.Invoke();
-                ShowSelectedBuildingInformation();
             }
 
             return isSelectionSuccess;
@@ -195,7 +198,6 @@ namespace Gameplay
         public void DeselectBuilding() 
         {
             selectController.DeselectObject();
-            HideSelectedBuildingInformation();
         }
 
         #endregion
@@ -253,26 +255,9 @@ namespace Gameplay
             return null;
         }
 
-        private void ShowSelectedBuildingInformation() 
+        private bool IsPlaceableValid(IPlaceable placeable) 
         {
-            BuildingViewModel viewModel = selectController.GetSelectedObject().ViewModel;
-
-            if (viewModel == null)
-                return;
-
-            GameUIController.Instance.ShowBuildingInformationPanel(viewModel.Name
-                , viewModel.SpriteBuilding
-                , viewModel.BuildingColor);
-
-            if (viewModel.IsProduceUnits)
-                UnitManager.Instance.ShowProducibleUnitInformation(viewModel.GetProducibleUnits());
-
-        }
-
-        private void HideSelectedBuildingInformation() 
-        {
-            GameUIController.Instance.HideBuildingInformationPanel();
-            GameUIController.Instance.HideProducibleUnitInformationPanel();
+            return (placeable as BuildingController) != null;
         }
     }
 }

@@ -7,8 +7,8 @@ namespace Gameplay
     {
         void Place(BoardCoordinate coordinate);
 
-        IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin);
-        IEnumerable<BoardCoordinate> GetPlaceCoordinates();
+        IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin, bool includeSpawnPoint = false);
+        IEnumerable<BoardCoordinate> GetPlaceCoordinates(bool includeSpawnPoint = false);
         bool IsEqual(IPlaceable placeable);
         bool IsCoordinateInBounds(BoardCoordinate coordinate);
     }
