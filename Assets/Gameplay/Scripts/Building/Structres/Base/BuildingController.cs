@@ -217,17 +217,13 @@ namespace Gameplay
             stateInfo.viewModel.AddHealth(healthDelta);
         }
 
-        public void GetDamage(int damage)
-        {
-            stateInfo.viewModel.AddHealth(-damage);
-
-            if (stateInfo.viewModel.Health <= 0)
-                OnDied();
-        }
-
         public void OnDied()
         {
-            Debug.Log("Died! " + gameObject.name);
+            BuildingManager.Instance.RemoveBuilding(this);
+
+            //TODO: Add get back pooler logic
+            ChangeState(States.None);
+            gameObject.SetActive(false);
         }
 
         public BoardCoordinate GetCoordinate() 

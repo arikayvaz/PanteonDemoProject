@@ -16,8 +16,6 @@ namespace Gameplay.UnitControllerStateMachine
         {
             base.OnEnter(info);
 
-            Debug.Log("Moving to Target");
-
             info.targetCoordinate = info.attackTarget.GetAttackableCoordinate();
 
             if (info.targetCoordinate == BoardCoordinate.Invalid)
@@ -32,13 +30,6 @@ namespace Gameplay.UnitControllerStateMachine
                 , info.targetCoordinate
                 , (coordinate) => OnMoved(info, coordinate)
                 , () => OnMovementComplete(info));
-        }
-
-        public override void OnExit(StateInfo info)
-        {
-            base.OnExit(info);
-
-            Debug.Log("Stopped moving to Target");
         }
 
         private void OnMoved(StateInfo info, BoardCoordinate coordinate) 

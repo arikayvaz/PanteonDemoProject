@@ -18,8 +18,8 @@ MonoBehaviour:
   <CellSizeY>k__BackingField: 1
   <Health>k__BackingField: 10
   <AttackDamage>k__BackingField: 2
-  <AttackTimeInterval>k__BackingField: 0.5
-  <MoveSpeed>k__BackingField: 1
+  <AttackDelay>k__BackingField: 0.2
+  <MoveSpeed>k__BackingField: 2
   <SpriteUnit>k__BackingField: {fileID: 21300000, guid: 7e74a9f0d83d4bd40b00dadfe2b136f9, type: 3}
   <UnitColor>k__BackingField: {r: 1, g: 0.14509803, b: 0.31193247, a: 1}
   <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}

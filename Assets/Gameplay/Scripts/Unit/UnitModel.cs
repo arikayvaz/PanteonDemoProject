@@ -12,6 +12,8 @@ namespace Gameplay
         public Color UnitColor => unitData.UnitColor;
         public int MoveSpeed => unitData.MoveSpeed;
         public StateColorDataSO StateColorData => unitData.StateColorData;
+        public int AttackDamage => unitData.AttackDamage;
+        public float AttackDelay => unitData.AttackDelay;
 
         public int health = 0;
         public BoardCoordinate coordinate = BoardCoordinate.Invalid;

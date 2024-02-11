@@ -11,7 +11,7 @@ namespace Gameplay
         [field: SerializeField, Min(0)] public int CellSizeY { get; private set; } = 0;
         [field: SerializeField, Min(0)] public int Health { get; private set; } = 0;
         [field: SerializeField, Min(0)] public int AttackDamage { get; private set; } = 0;
-        [field: SerializeField, Min(0f)] public float AttackTimeInterval { get; private set; } = 0;
+        [field: SerializeField, Min(0.01f)] public float AttackDelay { get; private set; } = 0;
         [field: SerializeField, Min(1)] public int MoveSpeed { get; private set; } = 1;
         [field: SerializeField] public Sprite SpriteUnit { get; private set; } = null;
         [field: SerializeField] public Color UnitColor { get; private set; } = Color.white;

@@ -5,7 +5,7 @@ namespace Gameplay
 {
     public class CameraController : Singleton<CameraController>, IController
     {
-        Camera camera;
+        private Camera camera;
 
         public void InitController()
         {

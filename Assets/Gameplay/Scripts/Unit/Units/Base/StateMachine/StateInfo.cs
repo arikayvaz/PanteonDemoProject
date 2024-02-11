@@ -11,6 +11,7 @@ namespace Gameplay.UnitControllerStateMachine
         public UnitController controller = null;
         public BoardVisual boardVisual = null;
         public UnitMovementController movementController = null;
+        public UnitAttackController attackController = null;
 
         [NonSerialized]
         [HideInInspector]

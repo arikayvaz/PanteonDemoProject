@@ -65,6 +65,22 @@ namespace Gameplay
             PlaceObject(placedObject, coordinates);
         }
 
+        public void OnBuildingDestroyed(IPlaceable removedObject, IEnumerable<BoardCoordinate> coordinates) 
+        {
+            foreach (BoardCoordinate coordinate in coordinates)
+            {
+                RemovePlacedObject(removedObject, coordinate);
+            }
+        }
+
+        public void OnUnitDestroyed(IPlaceable removedObject, IEnumerable<BoardCoordinate> coordinates) 
+        {
+            foreach (BoardCoordinate coordinate in coordinates)
+            {
+                RemovePlacedObject(removedObject, coordinate);
+            }
+        }
+
         public void OnUnitPlaced(IPlaceable placedObject, IEnumerable<BoardCoordinate> coordinates) 
         {
             PlaceObject(placedObject, coordinates);
@@ -115,7 +131,7 @@ namespace Gameplay
                 return false;
             }
 
-            RemovePlacedObject(oldCoordinate);
+            RemovePlacedObject(placeable, oldCoordinate);
             AddPlacedObject(placeable, newCoordinate);
             OnPlaceObjectUpdated?.Invoke(placeable, newCoordinate);
             return true;
@@ -141,7 +157,7 @@ namespace Gameplay
             Pathfinder.Instance.UpdatePathNodeState(coordinate.x, coordinate.y, false);
         }
 
-        private void RemovePlacedObject(BoardCoordinate coordinate) 
+        private void RemovePlacedObject(IPlaceable removedObject, BoardCoordinate coordinate) 
         {
             if (placedObjects?.Length < 1)
                 return;
@@ -151,6 +167,9 @@ namespace Gameplay
                 Debug.LogError("GameBoardManager: RemovePlacedObject: no placed object" + coordinate);
                 return;
             }
+
+            if (placedObjects[coordinate.x, coordinate.y] != removedObject)
+                return;
 
             placedObjects[coordinate.x, coordinate.y] = null;
             Pathfinder.Instance.UpdatePathNodeState(coordinate.x, coordinate.y, true);

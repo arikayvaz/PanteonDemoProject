@@ -28,7 +28,7 @@ namespace Gameplay
             }
         }
 
-        public List<BoardCoordinate> CalculatePathCoordinates(BoardCoordinate start, BoardCoordinate end, bool searchNearesEndCoordinate = false) 
+        public List<BoardCoordinate> CalculatePathCoordinates(BoardCoordinate start, BoardCoordinate end) 
         {
             List<PathNode> calculatedPath = FindPath(start, end);
 

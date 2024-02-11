@@ -16,11 +16,10 @@ namespace Gameplay
         private BoardCoordinate[] movePath = null;
         private int moveIndex = -1;
         private UnitController controller = null;
-        private float moveInterval = 0f;
         private int moveSpeed = 1;
         private BoardCoordinate targetCoordinate = BoardCoordinate.Invalid;
         private IEnumerator currentMovement = null;
-        private bool isMovingForAttacking = false;
+        private WaitForSeconds waitForSeconds = null;
 
         public void InitController() 
         {
@@ -31,7 +30,6 @@ namespace Gameplay
             , BoardCoordinate startCoordinate, BoardCoordinate endCoordinate
             , UnityAction<BoardCoordinate> onMoved, UnityAction onMovementComplete)
         {
-            isMovingForAttacking = false;
             StartMoving(controller, moveSpeed, startCoordinate, endCoordinate, onMoved, onMovementComplete);
         }
 
@@ -39,7 +37,6 @@ namespace Gameplay
             , BoardCoordinate startCoordinate, BoardCoordinate endCoordinate
             , UnityAction<BoardCoordinate> onMoved, UnityAction onMovementComplete) 
         {
-            isMovingForAttacking = true;
             StartMoving(controller, moveSpeed, startCoordinate, endCoordinate, onMoved, onMovementComplete);
         }
 
@@ -53,8 +50,9 @@ namespace Gameplay
             this.onMoved = onMoved;
             this.onMovementComplete = onMovementComplete;
 
-            movePath = Pathfinder.Instance.CalculatePathCoordinates(startCoordinate, targetCoordinate, isMovingForAttacking)?.ToArray();
-            moveInterval = 1f / moveSpeed;
+            movePath = Pathfinder.Instance.CalculatePathCoordinates(startCoordinate, targetCoordinate)?.ToArray();
+            float moveInterval = 1f / moveSpeed;
+            waitForSeconds = new WaitForSeconds(moveInterval);
 
             if (movePath == null || movePath.Length <1) 
             {
@@ -87,11 +85,10 @@ namespace Gameplay
             onMoved = null;
             movePath = null;
             moveIndex = -1;
-            moveInterval = 0f;
             moveSpeed = 1;
             targetCoordinate = BoardCoordinate.Invalid;
             currentMovement = null;
-            isMovingForAttacking = false;
+            waitForSeconds = null;
         }
 
         private IEnumerator MoveSequence() 
@@ -111,7 +108,7 @@ namespace Gameplay
                 if (moveIndex > movePath.Length - 1)
                     break;
                 else
-                    yield return new WaitForSeconds(moveInterval);
+                    yield return waitForSeconds;
             }
 
             CompleteMovement();
@@ -163,7 +160,7 @@ namespace Gameplay
             }
 
             StopMovement();
-            movePath = Pathfinder.Instance.CalculatePathCoordinates(controller.Coordinate, targetCoordinate, isMovingForAttacking).ToArray();
+            movePath = Pathfinder.Instance.CalculatePathCoordinates(controller.Coordinate, targetCoordinate).ToArray();
             StartMovement();
         }
 
@@ -187,7 +184,7 @@ namespace Gameplay
                 return;
 
             StopMovement();
-            movePath = Pathfinder.Instance.CalculatePathCoordinates(controller.Coordinate, targetCoordinate, isMovingForAttacking).ToArray();
+            movePath = Pathfinder.Instance.CalculatePathCoordinates(controller.Coordinate, targetCoordinate).ToArray();
             StartMovement();
 
         }

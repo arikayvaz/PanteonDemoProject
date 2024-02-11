@@ -17,6 +17,9 @@ namespace Gameplay
         public Color ColorSelected => model.StateColorData.ColorSelected;
         public Color ColorPlaceable => model.StateColorData.ColorPlaceable;
         public Color ColorUnplaceable => model.StateColorData.ColorUnPlaceable;
+        public int AttackDamage => model.AttackDamage;
+        public float AttackDelay => model.AttackDelay;
+        public int Health => model.health;
 
         public UnitViewModel(UnitModel model)
         {
@@ -26,6 +29,19 @@ namespace Gameplay
         public void UpdateCoordinate(BoardCoordinate coordinate)
         {
             model.coordinate = coordinate;
+        }
+
+        public void SetHealth(int health) 
+        {
+            model.health = health;
+        }
+
+        public void AddHealth(int healthDelta) 
+        {
+            model.health += healthDelta;
+
+            if (model.health < 0)
+                model.health = 0;
         }
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Gameplay
 {
-    public class UnitController : MonoBehaviour, IPickable, IPlaceable, ISelectable, IMoveable, IAttacker
+    public class UnitController : MonoBehaviour, IPickable, IPlaceable, ISelectable, IMoveable, IAttacker, IDamageable
     {
         public States CurrentState => stateMachine?.State?.StateId ?? States.None;
 
@@ -173,6 +173,40 @@ namespace Gameplay
         {
             stateInfo.attackTarget = target;
             ChangeState(States.MovingToTarget);
+        }
+
+        public int GetHealth()
+        {
+            return stateInfo.viewModel.Health;
+        }
+
+        public void SetHealth(int health)
+        {
+            stateInfo.viewModel.SetHealth(health);
+        }
+
+        public void AddHealth(int healthDelta)
+        {
+            stateInfo.viewModel.AddHealth(healthDelta);
+        }
+
+        public void OnDied()
+        {
+            UnitManager.Instance.RemoveUnit(this);
+
+            //TODO: Add get back pooler logic
+            ChangeState(States.None);
+            gameObject.SetActive(false);
+        }
+
+        public BoardCoordinate GetCoordinate()
+        {
+            return stateInfo.viewModel.Coordinate;
+        }
+
+        public BoardCoordinate GetAttackableCoordinate()
+        {
+            return GameBoardManager.Instance.GetClosestCoordinateFromArea(GetPlaceCoordinates(), true);
         }
     }
 }

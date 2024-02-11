@@ -218,6 +218,13 @@ namespace Gameplay
             units.Add(unit);
         }
 
+        public void RemoveUnit(UnitController unit) 
+        {
+            DeleteUnit(unit);
+
+            GameBoardManager.Instance.OnUnitDestroyed(unit, unit.GetPlaceCoordinates());
+        }
+
         public void DeleteUnit(UnitController unit) 
         {
             if (units.Count < 1 || !units.Contains(unit))

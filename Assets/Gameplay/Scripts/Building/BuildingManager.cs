@@ -165,6 +165,13 @@ namespace Gameplay
             return isPlacingSuccess;
         }
 
+        public void RemoveBuilding(BuildingController building) 
+        {
+            DeleteBuilding(building);
+
+            GameBoardManager.Instance.OnBuildingDestroyed(building, building.GetPlaceCoordinates());
+        }
+
         #endregion
 
         #region Spawn

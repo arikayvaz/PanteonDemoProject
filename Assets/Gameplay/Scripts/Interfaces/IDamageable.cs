@@ -8,7 +8,13 @@ namespace Gameplay
         int GetHealth();
         void SetHealth(int health);
         void AddHealth(int healthDelta);
-        void GetDamage(int damage);
+        virtual void GetDamage(int damage) 
+        {
+            AddHealth(-damage);
+
+            if (GetHealth() <= 0)
+                OnDied();
+        }
         void OnDied();
         BoardCoordinate GetCoordinate();
         BoardCoordinate GetAttackableCoordinate();
