@@ -5,13 +5,18 @@ using UnityEngine.Events;
 
 namespace Gameplay
 {
-    public class BuildingProductionUIController : Singleton<BuildingProductionUIController>, IController
+    public class BuildingProductionUIController : MonoBehaviour, IController
     {
         [SerializeField] BuildingProductionSelectItem[] items = null;
 
         private UnityEvent<BuildingTypes> onItemClick;
 
         public void InitController() 
+        {
+            InitItems();
+        }
+
+        private void InitItems() 
         {
             BuildingDataSO[] datas = BuildingManager.Instance.GetBuildingDatas().ToArray();
 
@@ -25,7 +30,7 @@ namespace Gameplay
             {
                 BuildingProductionSelectItem item = items[i];
 
-                if (i > datas.Length - 1) 
+                if (i > datas.Length - 1)
                 {
                     item.gameObject.SetActive(false);
                     continue;

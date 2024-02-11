@@ -31,47 +31,6 @@ namespace Gameplay
 
             OnBuildingPicked?.RemoveAllListeners();
         }
-        /*
-        private void Update()
-        {
-#warning remove test codes
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                PickBuilding(BuildingTypes.Barracks);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                PickBuilding(BuildingTypes.PowerPlant);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                DropBuilding();
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                PlaceBuilding();
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                SelectBuilding(InputManager.Instance.CurrentInputCoordinate);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                DeselectBuilding();
-                return;
-            }
-        }
-        */
 
         public void InitManager()
         {
@@ -177,6 +136,9 @@ namespace Gameplay
 
             pickController.PickObject(building);
 
+            if (selectController.IsSelectedObject)
+                DeselectBuilding();
+
             OnBuildingPicked?.Invoke();
         }
 
@@ -221,8 +183,11 @@ namespace Gameplay
         {
             bool isSelectionSuccess = selectController.SelectObject(coordinate);
 
-            if (isSelectionSuccess)
+            if (isSelectionSuccess) 
+            {
                 OnBuildingSelected?.Invoke();
+                ShowSelectedBuildingInformation();
+            }
 
             return isSelectionSuccess;
         }
@@ -230,6 +195,7 @@ namespace Gameplay
         public void DeselectBuilding() 
         {
             selectController.DeselectObject();
+            HideSelectedBuildingInformation();
         }
 
         #endregion
@@ -285,6 +251,28 @@ namespace Gameplay
             }
 
             return null;
+        }
+
+        private void ShowSelectedBuildingInformation() 
+        {
+            BuildingViewModel viewModel = selectController.GetSelectedObject().ViewModel;
+
+            if (viewModel == null)
+                return;
+
+            GameUIController.Instance.ShowBuildingInformationPanel(viewModel.Name
+                , viewModel.SpriteBuilding
+                , viewModel.BuildingColor);
+
+            if (viewModel.IsProduceUnits)
+                UnitManager.Instance.ShowProducibleUnitInformation(viewModel.GetProducibleUnits());
+
+        }
+
+        private void HideSelectedBuildingInformation() 
+        {
+            GameUIController.Instance.HideBuildingInformationPanel();
+            GameUIController.Instance.HideProducibleUnitInformationPanel();
         }
     }
 }

@@ -6,10 +6,8 @@ using UnityEngine.UI;
 
 namespace Gameplay
 {
-    public class UnitControllerBase : MonoBehaviour, IPickable, IPlaceable, ISelectable, IMoveable
+    public class UnitController : MonoBehaviour, IPickable, IPlaceable, ISelectable, IMoveable
     {
-        [SerializeField] protected UnitTypes unitType = UnitTypes.None;
-
         public States CurrentState => stateMachine?.State?.StateId ?? States.None;
 
         [SerializeField] protected StateInfo stateInfo = new StateInfo();
@@ -19,14 +17,14 @@ namespace Gameplay
         {
             get
             {
-                return GameBoardManager.Instance?.GetWorldPositionFromCoordinate(stateInfo.currentCoordinate) ?? Vector2.zero;
+                return GameBoardManager.Instance?.GetWorldPositionFromCoordinate(stateInfo?.viewModel?.Coordinate ?? BoardCoordinate.Invalid) ?? Vector2.zero;
             }
         }
 
 
-        public void InitController(UnitDataSO unitData, BoardCoordinate coordinate)
+        public void InitController(UnitModel model, BoardCoordinate coordinate)
         {
-            stateInfo.unitData = unitData;
+            stateInfo.viewModel = new UnitViewModel(model);
 
             UpdateCoordinate(coordinate);
 
@@ -68,12 +66,12 @@ namespace Gameplay
 
         public IEnumerable<BoardCoordinate> GetPlaceCoordinates(BoardCoordinate origin)
         {
-            if (stateInfo == null || stateInfo.unitData == null)
+            if (stateInfo == null || stateInfo.viewModel == null)
                 yield return BoardCoordinate.Invalid;
 
-            for (int y = 0; y < stateInfo.unitData.CellSizeY; y++)
+            for (int y = 0; y < stateInfo.viewModel.CellSizeY; y++)
             {
-                for (int x = 0; x < stateInfo.unitData.CellSizeX; x++)
+                for (int x = 0; x < stateInfo.viewModel.CellSizeX; x++)
                 {
                     yield return new BoardCoordinate(origin.x + x, origin.y + y);
                 }
@@ -82,14 +80,14 @@ namespace Gameplay
 
         public IEnumerable<BoardCoordinate> GetPlaceCoordinates()
         {
-            if (stateInfo == null || stateInfo.unitData == null)
+            if (stateInfo == null || stateInfo.viewModel == null)
                 yield return BoardCoordinate.Invalid;
 
-            for (int y = 0; y < stateInfo.unitData.CellSizeY; y++)
+            for (int y = 0; y < stateInfo.viewModel.CellSizeY; y++)
             {
-                for (int x = 0; x < stateInfo.unitData.CellSizeX; x++)
+                for (int x = 0; x < stateInfo.viewModel.CellSizeX; x++)
                 {
-                    yield return new BoardCoordinate(stateInfo.currentCoordinate.x + x, stateInfo.currentCoordinate.y + y);
+                    yield return new BoardCoordinate(stateInfo.viewModel.Coordinate.x + x, stateInfo.viewModel.Coordinate.y + y);
                 }
             }
         }
@@ -104,7 +102,7 @@ namespace Gameplay
 
         public void UpdateCoordinate(BoardCoordinate coordinate)
         {
-            stateInfo.currentCoordinate = coordinate;
+            stateInfo.viewModel.UpdateCoordinate(coordinate);
             UpdatePosition();
         }
 
@@ -120,7 +118,7 @@ namespace Gameplay
 
         private void SetVisualSize()
         {
-            stateInfo.trVisual.localScale = new Vector3(stateInfo.unitData.CellSizeX, stateInfo.unitData.CellSizeY, 1f);
+            stateInfo.trVisual.localScale = new Vector3(stateInfo.viewModel.CellSizeX, stateInfo.viewModel.CellSizeY, 1f);
         }
 
         private void UpdatePosition()
@@ -150,7 +148,7 @@ namespace Gameplay
 
         public bool IsEqual(ISelectable selectable) 
         {
-            UnitControllerBase unit = selectable as UnitControllerBase;
+            UnitController unit = selectable as UnitController;
 
             if (unit == null)
                 return false;
@@ -160,7 +158,7 @@ namespace Gameplay
 
         public bool IsEqual(IPlaceable placeable) 
         {
-            UnitControllerBase unit = placeable as UnitControllerBase;
+            UnitController unit = placeable as UnitController;
 
             if (unit == null)
                 return false;
@@ -176,7 +174,7 @@ namespace Gameplay
         public void Move(BoardCoordinate targetCoordinate)
         {
             stateInfo.targetCoordinate = targetCoordinate;
-            stateInfo.movePath = Pathfinder.Instance.CalculatePathCoordinates(stateInfo.currentCoordinate, targetCoordinate).ToArray();
+            stateInfo.movePath = Pathfinder.Instance.CalculatePathCoordinates(stateInfo.viewModel.Coordinate, targetCoordinate).ToArray();
 
             ChangeState(States.MovingToPosition);
         }

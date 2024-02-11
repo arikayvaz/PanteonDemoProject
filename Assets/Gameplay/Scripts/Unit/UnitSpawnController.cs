@@ -5,47 +5,47 @@ namespace Gameplay
 {
     public class UnitSpawnController : MonoBehaviour, IController
     {
-        [SerializeField] UnitSpawnData[] spawnDatas = null;
+        [SerializeField] UnitSpawnModel[] spawnModels = null;
 
         public void InitController()
         {
             
         }
 
-        public UnitControllerBase SpawnUnitForPicking(UnitTypes unitType)
+        public UnitController SpawnUnitForPicking(UnitModel model)
         {
-            return SpawnUnit(unitType, BoardCoordinate.Invalid);
+            return SpawnUnit(model, BoardCoordinate.Invalid);
         }
 
-        public UnitControllerBase SpawnUnit(UnitTypes unitType, BoardCoordinate coordinate)
+        public UnitController SpawnUnit(UnitModel model, BoardCoordinate coordinate)
         {
-            UnitSpawnData spawnData = GetUnitSpawnData(unitType);
+            UnitSpawnModel spawnData = GetUnitSpawnModel(model.UnitType);
 
             if (spawnData == null)
                 return null;
 
-            UnitControllerBase unit = spawnData.Pooler.GetGo<UnitControllerBase>();
+            UnitController unit = spawnData.Pooler.GetGo<UnitController>();
 
             if (unit == null)
                 return null;
 
-            unit.InitController(spawnData.UnitData, coordinate);
+            unit.InitController(model, coordinate);
             unit.gameObject.SetActive(true);
 
             return unit;
         }
 
-        private UnitSpawnData GetUnitSpawnData(UnitTypes unitType)
+        private UnitSpawnModel GetUnitSpawnModel(UnitTypes unitType)
         {
-            if (spawnDatas == null || spawnDatas.Length < 1)
+            if (spawnModels == null || spawnModels.Length < 1)
                 return null;
 
-            foreach (UnitSpawnData data in spawnDatas)
+            foreach (UnitSpawnModel model in spawnModels)
             {
-                if (data.UnitType != unitType)
+                if (model.UnitType != unitType)
                     continue;
 
-                return data;
+                return model;
             }
 
             return null;

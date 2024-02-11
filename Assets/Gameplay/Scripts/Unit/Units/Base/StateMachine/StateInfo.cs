@@ -10,14 +10,12 @@ namespace Gameplay.UnitControllerStateMachine
         public Transform transform = null;
         public SpriteRenderer spriteVisual = null;
         public Transform trVisual = null;
-        public UnitControllerBase controller = null;
+        public UnitController controller = null;
 
-        [HideInInspector]
-        [NonSerialized]
-        public UnitDataSO unitData;
         [NonSerialized]
         [HideInInspector]
-        public BoardCoordinate currentCoordinate;
+        public UnitViewModel viewModel = null;
+
         [NonSerialized]
         [HideInInspector]
         public BoardCoordinate targetCoordinate;

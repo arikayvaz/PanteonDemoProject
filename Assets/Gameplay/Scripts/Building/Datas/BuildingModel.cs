@@ -10,6 +10,9 @@ namespace Gameplay
         public int CellSizeY => buildingData.CellSizeY;
         public Color BuildingColor => buildingData.BuildingColor;
         public StateColorDataSO StateColorData => buildingData.StateColorData;
+        public Sprite SpriteBuilding => buildingData.SpriteBuilding;
+        public UnitTypes[] ProducibleUnits => buildingData.producibleUnits;
+        public bool IsProduceUnits => buildingData.IsProduceUnits;
 
         public int health = 0;
         public BoardCoordinate coordinate = BoardCoordinate.Invalid;

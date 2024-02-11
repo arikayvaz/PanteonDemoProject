@@ -13,5 +13,7 @@ namespace Gameplay
         [field: SerializeField] public Sprite SpriteBuilding { get; private set; } = null;
         [field: SerializeField] public Color BuildingColor { get; private set; } = Color.white;
         [field: SerializeField] public StateColorDataSO StateColorData { get; private set; } = null;
+        public UnitTypes[] producibleUnits = null;
+        public bool IsProduceUnits => producibleUnits?.Length > 0;
     }
 }

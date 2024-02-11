@@ -24,7 +24,7 @@ namespace Gameplay.GameManagerStateMachine
             BuildingManager.Instance.InitManager();
             UnitManager.Instance.InitManager();
 
-            BuildingProductionUIController.Instance.InitController();
+            GameUIController.Instance.InitController();
         }
     }
 }

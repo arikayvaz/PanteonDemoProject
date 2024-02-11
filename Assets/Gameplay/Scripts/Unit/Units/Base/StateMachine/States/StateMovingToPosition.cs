@@ -21,7 +21,7 @@ namespace Gameplay.UnitControllerStateMachine
         {
             base.OnEnter(info);
 
-            if (info.movePath?.Length < 1 || info.targetCoordinate == BoardCoordinate.Invalid || info.targetCoordinate == info.currentCoordinate) 
+            if (info.movePath?.Length < 1 || info.targetCoordinate == BoardCoordinate.Invalid || info.targetCoordinate == info.viewModel.Coordinate) 
             {
                 OnMovementComplete(info);
                 return;
@@ -31,7 +31,7 @@ namespace Gameplay.UnitControllerStateMachine
 
             stateInfo = info;
 
-            float moveInterval = 1f / info.unitData.MoveSpeed;
+            float moveInterval = 1f / info.viewModel.MoveSpeed;
             movementEnumerator = MovementCoroutine(info, moveInterval, () => OnMovementComplete(info));
 
             info.controller.HandleCoroutine(movementEnumerator);
@@ -60,7 +60,7 @@ namespace Gameplay.UnitControllerStateMachine
             while (movementIndex < info.movePath.Length)
             {
                 BoardCoordinate coordinate = info.movePath[movementIndex];
-                bool success = GameBoardManager.Instance.UpdatePlaceableCoordinate(info.currentCoordinate, coordinate);
+                bool success = GameBoardManager.Instance.UpdatePlaceableCoordinate(info.viewModel.Coordinate, coordinate);
 
                 if (!success)
                     break;
@@ -115,7 +115,7 @@ namespace Gameplay.UnitControllerStateMachine
             }
 
             stateInfo.controller.TerminateCoroutine(movementEnumerator);
-            stateInfo.movePath = Pathfinder.Instance.CalculatePathCoordinates(stateInfo.currentCoordinate, stateInfo.targetCoordinate).ToArray();
+            stateInfo.movePath = Pathfinder.Instance.CalculatePathCoordinates(stateInfo.viewModel.Coordinate, stateInfo.targetCoordinate).ToArray();
             stateInfo.controller.HandleCoroutine(movementEnumerator);
         }
 
@@ -128,10 +128,10 @@ namespace Gameplay.UnitControllerStateMachine
                 return;
 
             int nextMoveIndex = 0;
-            if (movementIndex + stateInfo.unitData.MoveSpeed > stateInfo.movePath.Length - 1)
+            if (movementIndex + stateInfo.viewModel.MoveSpeed > stateInfo.movePath.Length - 1)
                 nextMoveIndex = stateInfo.movePath.Length - 1;
             else
-                nextMoveIndex = movementIndex + stateInfo.unitData.MoveSpeed;
+                nextMoveIndex = movementIndex + stateInfo.viewModel.MoveSpeed;
 
             BoardCoordinate nextCoordinate = stateInfo.movePath[nextMoveIndex];
 
@@ -139,7 +139,7 @@ namespace Gameplay.UnitControllerStateMachine
                 return;
 
             stateInfo.controller.TerminateCoroutine(movementEnumerator);
-            stateInfo.movePath = Pathfinder.Instance.CalculatePathCoordinates(stateInfo.currentCoordinate, stateInfo.targetCoordinate).ToArray();
+            stateInfo.movePath = Pathfinder.Instance.CalculatePathCoordinates(stateInfo.viewModel.Coordinate, stateInfo.targetCoordinate).ToArray();
             stateInfo.controller.HandleCoroutine(movementEnumerator);
 
         }

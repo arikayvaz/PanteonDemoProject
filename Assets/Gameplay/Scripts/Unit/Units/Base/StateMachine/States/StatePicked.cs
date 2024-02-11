@@ -47,7 +47,7 @@ namespace Gameplay.UnitControllerStateMachine
         private void OnInputCoordinateChanged(BoardCoordinate updatedCoordinate)
         {
             bool isCoordinatePlaceable = GameBoardManager.Instance.IsCoordinatesPlaceable(stateInfo.controller.GetPlaceCoordinates(updatedCoordinate));
-            Color visualColor = isCoordinatePlaceable ? stateInfo.unitData.ColorPlaceable : stateInfo.unitData.ColorUnPlaceable;
+            Color visualColor = isCoordinatePlaceable ? stateInfo.viewModel.ColorPlaceable : stateInfo.viewModel.ColorUnplaceable;
 
             stateInfo.controller.UpdateVisualColor(visualColor);
         }

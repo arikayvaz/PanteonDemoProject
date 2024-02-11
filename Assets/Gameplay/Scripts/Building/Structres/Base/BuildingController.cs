@@ -12,6 +12,8 @@ namespace Gameplay
         [SerializeField] protected StateInfo stateInfo = new StateInfo();
         protected StateMachine stateMachine;
 
+        public BuildingViewModel ViewModel => stateInfo?.viewModel;
+
         public Vector2 Position 
         {
             get 

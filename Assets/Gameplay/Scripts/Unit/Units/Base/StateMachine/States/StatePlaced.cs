@@ -21,12 +21,12 @@ namespace Gameplay.UnitControllerStateMachine
 
         private void SetPosition(StateInfo info)
         {
-            info.transform.position = GameBoardManager.Instance.GetWorldPositionFromCoordinate(info.currentCoordinate);
+            info.transform.position = GameBoardManager.Instance.GetWorldPositionFromCoordinate(info.viewModel.Coordinate);
         }
 
         private void UpdateColor(StateInfo info)
         {
-            info.controller.UpdateVisualColor(info.unitData.UnitColor);
+            info.controller.UpdateVisualColor(info.viewModel.UnitColor);
         }
     }
 }

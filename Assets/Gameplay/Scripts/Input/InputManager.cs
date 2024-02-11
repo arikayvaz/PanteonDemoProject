@@ -1,6 +1,8 @@
 using Common;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Gameplay
 {
@@ -27,6 +29,9 @@ namespace Gameplay
 
             if (Input.GetMouseButtonDown(0))
             {
+                if (IsPointerOverUIObject())
+                    return;
+
                 BoardCoordinate coord = GetCoordinateFromInputPosition(Input.mousePosition);
 
                 HandleLeftClickInput(coord);
@@ -78,6 +83,15 @@ namespace Gameplay
 
             CurrentInputCoordinate = calculatedCoord;
             OnInputCoordinateChange?.Invoke(CurrentInputCoordinate);
+        }
+
+        private bool IsPointerOverUIObject()
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = Input.mousePosition;
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            return results.Count > 0;
         }
     }
 }

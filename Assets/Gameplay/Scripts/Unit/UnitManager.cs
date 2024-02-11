@@ -1,6 +1,8 @@
 using Common;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,6 +10,9 @@ namespace Gameplay
 {
     public class UnitManager : Singleton<UnitManager>, IManager
     {
+        [SerializeField] UnitDataSO[] unitDatas = null;
+
+        [Space]
         [SerializeField] UnitSpawnController spawnController = null;
         [SerializeField] UnitPickController pickController = null;
         [SerializeField] UnitPlaceController placeController = null;
@@ -18,9 +23,9 @@ namespace Gameplay
         [HideInInspector]
         public UnityEvent OnUnitSelected;
 
-        List<UnitControllerBase> units = null;
+        List<UnitController> units = null;
 
-        private GameBoardSelectController<UnitControllerBase> selectController = null;
+        private GameBoardSelectController<UnitController> selectController = null;
 
         protected override void OnDestroy()
         {
@@ -83,22 +88,31 @@ namespace Gameplay
 
         public void InitManager()
         {
-            units = new List<UnitControllerBase>();
+            units = new List<UnitController>();
 
             spawnController.InitController();
             pickController.InitController();
             placeController.InitController();
 
-            selectController = new GameBoardSelectController<UnitControllerBase>();
+            selectController = new GameBoardSelectController<UnitController>();
             selectController.InitController();
 
             BuildingManager.Instance.OnBuildingPicked.AddListener(OnBuildingPicked);
             BuildingManager.Instance.OnBuildingSelected.AddListener(OnBuildingSelected);
         }
 
+        #region Spawning
+
         public void SpawnUnit(UnitTypes unitType, BoardCoordinate coordinate) 
         {
-            UnitControllerBase unit = spawnController.SpawnUnit(unitType, coordinate);
+            UnitDataSO unitData = GetUnitData(unitType);
+
+            if (unitData == null)
+                return;
+
+            UnitModel unitModel = new UnitModel(unitData);
+
+            UnitController unit = spawnController.SpawnUnit(unitModel, coordinate);
 
             if (unit == null)
                 return;
@@ -106,12 +120,22 @@ namespace Gameplay
             AddUnit(unit);
         }
 
+        #endregion
+
+        #region Picking
         public void PickUnit(UnitTypes unitType)
         {
             if (pickController.IsPickedUnit)
                 pickController.DropObject();
 
-            UnitControllerBase unit = spawnController.SpawnUnitForPicking(unitType);
+            UnitDataSO unitData = GetUnitData(unitType);
+
+            if (unitData == null)
+                return;
+
+            UnitModel model = new UnitModel(unitData);
+
+            UnitController unit = spawnController.SpawnUnitForPicking(model);
 
             if (unit == null)
                 return;
@@ -126,6 +150,10 @@ namespace Gameplay
             pickController.DropObject();
         }
 
+        #endregion
+
+        #region Placing
+
         public void PlaceUnit()
         {
             if (!pickController.IsPickedUnit)
@@ -137,6 +165,10 @@ namespace Gameplay
                 pickController.DropObject();
 
         }
+
+        #endregion
+
+        #region Selecting
 
         public void SelectUnit(BoardCoordinate coordinate) 
         {
@@ -151,7 +183,9 @@ namespace Gameplay
             selectController.DeselectObject();
         }
 
-        public void AddUnit(UnitControllerBase unit) 
+        #endregion
+
+        public void AddUnit(UnitController unit) 
         {
             if (units.Contains(unit))
                 return;
@@ -159,12 +193,25 @@ namespace Gameplay
             units.Add(unit);
         }
 
-        public void DeleteUnit(UnitControllerBase unit) 
+        public void DeleteUnit(UnitController unit) 
         {
             if (units.Count < 1 || !units.Contains(unit))
                 return;
 
             units.Remove(unit);
+        }
+
+        public void ShowProducibleUnitInformation(IEnumerable<UnitTypes> producibleUnits) 
+        {
+            if (producibleUnits == null)
+                return;
+
+            IEnumerable<UnitDataSO> unitDatas = GetUnitDatas(producibleUnits);
+
+            if (unitDatas == null)
+                return;
+
+            GameUIController.Instance.ShowProducibleUnitInformationPanel(unitDatas);
         }
 
         private void HandleUnitCommand(BoardCoordinate coordinate) 
@@ -190,7 +237,7 @@ namespace Gameplay
 
         private void MoveToCoordinate(BoardCoordinate coordinate) 
         {
-            UnitControllerBase selectedUnit = selectController.GetSelectedObject();
+            UnitController selectedUnit = selectController.GetSelectedObject();
 
             if (selectedUnit == null)
                 return;
@@ -207,6 +254,33 @@ namespace Gameplay
         private void OnBuildingSelected() 
         {
             DeselectUnit();
+        }
+
+        private UnitDataSO GetUnitData(UnitTypes unitType) 
+        {
+            if (unitDatas?.Length < 1)
+                return null;
+
+            foreach (UnitDataSO data in unitDatas)
+            {
+                if (data.UnitType == unitType)
+                    return data;
+            }
+
+            return null;
+        }
+
+        private IEnumerable<UnitDataSO> GetUnitDatas(IEnumerable producibleUnits) 
+        {
+            foreach (UnitTypes unitType in producibleUnits)
+            {
+                UnitDataSO data = GetUnitData(unitType);
+
+                if (data == null)
+                    continue;
+
+                yield return data;
+            }
         }
     }
 }

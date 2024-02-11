@@ -10,7 +10,7 @@ namespace Gameplay
             
         }
 
-        public bool PlaceUnit(UnitControllerBase unit)
+        public bool PlaceUnit(UnitController unit)
         {
             Vector2 inputWorldPos = InputManager.Instance.WorldPosition;
             BoardCoordinate placeCoord = GameBoardManager.Instance.GetCoordinateFromWorldPosition(inputWorldPos);

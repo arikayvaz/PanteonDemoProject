@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gameplay
@@ -15,6 +16,9 @@ namespace Gameplay
         public Color ColorSelected => model.StateColorData.ColorSelected;
         public Color ColorPlaceable => model.StateColorData.ColorPlaceable;
         public Color ColorUnplaceable => model.StateColorData.ColorUnPlaceable;
+        public Sprite SpriteBuilding => model.SpriteBuilding;
+
+        public bool IsProduceUnits => model.IsProduceUnits;
 
         public BuildingViewModel(BuildingModel model)
         {
@@ -24,6 +28,18 @@ namespace Gameplay
         public void UpdateCoordinate(BoardCoordinate coordinate) 
         {
             model.coordinate = coordinate;
+        }
+
+        public IEnumerable<UnitTypes> GetProducibleUnits() 
+        {
+            if (!IsProduceUnits)
+                yield return UnitTypes.None;
+
+            foreach (UnitTypes unitType in model.ProducibleUnits)
+            {
+                yield return unitType;
+            }
+
         }
 
     }

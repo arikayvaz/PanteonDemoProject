@@ -13,14 +13,14 @@ namespace Gameplay.UnitControllerStateMachine
         {
             base.OnEnter(info);
 
-            info.controller.UpdateVisualColor(info.unitData.StateColorData.ColorSelected);
+            info.controller.UpdateVisualColor(info.viewModel.ColorSelected);
         }
 
         public override void OnExit(StateInfo info)
         {
             base.OnExit(info);
 
-            info.controller.UpdateVisualColor(info.unitData.UnitColor);
+            info.controller.UpdateVisualColor(info.viewModel.UnitColor);
         }
     }
 }
