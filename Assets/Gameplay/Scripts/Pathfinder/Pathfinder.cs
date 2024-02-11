@@ -28,7 +28,7 @@ namespace Gameplay
             }
         }
 
-        public List<BoardCoordinate> CalculatePathCoordinates(BoardCoordinate start, BoardCoordinate end) 
+        public List<BoardCoordinate> CalculatePathCoordinates(BoardCoordinate start, BoardCoordinate end, bool searchNearesEndCoordinate = false) 
         {
             List<PathNode> calculatedPath = FindPath(start, end);
 
@@ -236,5 +236,41 @@ namespace Gameplay
 
             return neighbours;
         }
+
+        /*
+        private PathNode GetNearestNode(PathNode startNode, PathNode checkNode) 
+        {
+            PathNode nearestNode = null;
+            List<PathNode> openList = new List<PathNode>();
+            openList.Add(checkNode);
+            List<PathNode> closedList = new List<PathNode>();
+
+            while (openList.Count > 1)
+            {
+                PathNode currentNode = openList[0];
+
+                if (currentNode == startNode)
+                    break;
+
+                openList.Remove(currentNode);
+
+                foreach (PathNode neighbour in GetNeighbours(currentNode)) 
+                {
+                    if (closedList.Contains(neighbour))
+                        continue;
+
+                    if (neighbour.isWalkable)
+                    {
+                        nearestNode = neighbour;
+                        break;
+                    }
+
+                    closedList.Add(neighbour);
+                }
+            }
+
+            return nearestNode;
+        }
+        */
     }
 }

@@ -15,9 +15,11 @@ namespace Gameplay.UnitControllerStateMachine
         {
             base.OnEnter(info);
 
+            stateInfo = info;
+
             UpdatePosition(info);
 
-            stateInfo = info;
+            stateInfo.boardVisual.UpdateSortingOrder(GameBoardManager.BoardSettings.BoardSortingOrderPicked);
 
             OnInputCoordinateChanged(InputManager.Instance.CurrentInputCoordinate);
             InputManager.Instance.OnInputCoordinateChange += OnInputCoordinateChanged;

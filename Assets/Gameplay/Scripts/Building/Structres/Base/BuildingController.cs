@@ -1,12 +1,13 @@
 using Gameplay.BuildingControllerStateMachine;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Profiling.HierarchyFrameDataView;
 
 namespace Gameplay
 {
-    public abstract class BuildingController : MonoBehaviour, IPickable, IPlaceable, ISelectable
+    public abstract class BuildingController : MonoBehaviour, IPickable, IPlaceable, ISelectable, IDamageable
     {
         public States CurrentState => stateMachine?.State?.StateId ?? States.None;
 
@@ -199,6 +200,44 @@ namespace Gameplay
             bool isInYBounds = coordinate.y >= stateInfo.viewModel.Coordinate.y && coordinate.y <= stateInfo.viewModel.Coordinate.y;
 
             return isInXBounds && isInYBounds;
+        }
+
+        public int GetHealth()
+        {
+            return stateInfo.viewModel.Health;
+        }
+
+        public void SetHealth(int health)
+        {
+            stateInfo.viewModel.SetHealth(health);
+        }
+
+        public void AddHealth(int healthDelta) 
+        {
+            stateInfo.viewModel.AddHealth(healthDelta);
+        }
+
+        public void GetDamage(int damage)
+        {
+            stateInfo.viewModel.AddHealth(-damage);
+
+            if (stateInfo.viewModel.Health <= 0)
+                OnDied();
+        }
+
+        public void OnDied()
+        {
+            Debug.Log("Died! " + gameObject.name);
+        }
+
+        public BoardCoordinate GetCoordinate() 
+        {
+            return stateInfo.viewModel.Coordinate;
+        }
+
+        public BoardCoordinate GetAttackableCoordinate() 
+        {
+            return GameBoardManager.Instance.GetClosestCoordinateFromArea(GetPlaceCoordinates(), true);
         }
     }
 }

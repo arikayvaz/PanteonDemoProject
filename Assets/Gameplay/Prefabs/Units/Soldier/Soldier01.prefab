@@ -73,11 +73,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1bf6183822495b41aa2c9730ef6c581, type: 3}
---- !u!4 &86967373384606459 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1817591389798324917, guid: a1bf6183822495b41aa2c9730ef6c581, type: 3}
-  m_PrefabInstance: {fileID: 1733210621813438542}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &86967374124445149 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1817591389461140883, guid: a1bf6183822495b41aa2c9730ef6c581, type: 3}
@@ -100,14 +95,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c138954539f662947b7a2335a0e1ca23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitType: 1
   stateInfo:
     transform: {fileID: 86967374124445149}
-    spriteVisual: {fileID: 86967374684228929}
-    trVisual: {fileID: 86967373384606459}
     controller: {fileID: 3649317512352908741}
---- !u!212 &86967374684228929 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 1817591391027836175, guid: a1bf6183822495b41aa2c9730ef6c581, type: 3}
+    boardVisual: {fileID: 9017483208301660658}
+    movementController: {fileID: 8308505517864216172}
+--- !u!114 &8308505517864216172 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7728216951758315042, guid: a1bf6183822495b41aa2c9730ef6c581, type: 3}
   m_PrefabInstance: {fileID: 1733210621813438542}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86967374124445151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f4269ae8c437674caa870309b7f1a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9017483208301660658 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7289375971050877372, guid: a1bf6183822495b41aa2c9730ef6c581, type: 3}
+  m_PrefabInstance: {fileID: 1733210621813438542}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 417e2529f54bf2648b3d7665521fadf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

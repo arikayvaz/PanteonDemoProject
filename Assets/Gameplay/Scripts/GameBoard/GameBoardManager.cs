@@ -1,6 +1,7 @@
 using Common;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -169,6 +170,92 @@ namespace Gameplay
                     rend.color = (x + y) % 2 == 0 ? UnityEngine.Color.white : UnityEngine.Color.black;
                 }
             }
+        }
+
+        public IEnumerable<BoardCoordinate> GetArea(BoardCoordinate start, BoardCoordinate end, bool checkPlaceable) 
+        {
+            BoardCoordinate coordinate = BoardCoordinate.Invalid;
+
+            for (int x = start.x; x <= end.x; x++)
+            {
+                for (int y = start.y; y <= end.y; y++)
+                {
+                    coordinate.x = x;
+                    coordinate.y = y;
+
+                    if (!IsCoordinateInBoardBounds(coordinate))
+                        continue;
+
+                    if (!checkPlaceable)
+                    {
+                        yield return new BoardCoordinate(x, y);
+                    }
+
+                    if (!IsCoordinatePlaceable(coordinate))
+                        continue;
+
+                    yield return new BoardCoordinate(x, y);
+                }
+            }
+        }
+
+        public BoardCoordinate GetClosestCoordinateFromArea(IEnumerable<BoardCoordinate> coordinates, bool checkPlaceable) 
+        {
+            int minX = int.MaxValue;
+            int minY = int.MaxValue;
+            int maxX = int.MinValue;
+            int maxY = int.MinValue;
+
+            foreach (BoardCoordinate coordinate in coordinates)
+            {
+                /*
+                if (coordinate.x < minX)
+                    minX = coordinate.x;
+
+                if (coordinate.x > maxX)
+                    maxX = coordinate.x;
+
+                if (coordinate.y < minY)
+                    minY = coordinate.y;
+
+                if (coordinate.y > maxY)
+                    maxY = coordinate.y;
+                */
+
+                minX = Mathf.Min(minX, coordinate.x);
+                maxX = Mathf.Max(maxX, coordinate.x);
+                minY = Mathf.Min(minY, coordinate.y);
+                maxY = Mathf.Max(maxY, coordinate.y);
+            }
+
+            BoardCoordinate start = new BoardCoordinate(minX, minY);
+            BoardCoordinate end = new BoardCoordinate(maxX, maxY);
+
+            start += new BoardCoordinate(-1, -1);
+            end += new BoardCoordinate(1, 1);
+
+            BoardCoordinate[] area = GetArea(start, end, true).ToArray();
+
+            if (area == null || area.Length < 1)
+                return BoardCoordinate.Invalid;
+
+            int distance = int.MaxValue;
+            BoardCoordinate result = area[0];
+
+            for (int i = 1; i < area.Length; i++)
+            {
+                BoardCoordinate c1 = area[i];
+
+                int dist = BoardCoordinate.Distance(c1, result);
+
+                if (dist >= distance)
+                    continue;
+
+                distance = dist;
+                result = c1;
+            }
+
+            return result;
         }
     }
 }

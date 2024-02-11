@@ -11,6 +11,7 @@ namespace Gameplay
         public int CellSizeX => model.CellSizeX;
         public int CellSizeY => model.CellSizeY;
         public BoardCoordinate Coordinate => model.coordinate;
+        public Sprite SpriteUnit => model.SpriteUnit;
         public Color UnitColor => model.UnitColor;
         public int MoveSpeed => model.MoveSpeed;
         public Color ColorSelected => model.StateColorData.ColorSelected;

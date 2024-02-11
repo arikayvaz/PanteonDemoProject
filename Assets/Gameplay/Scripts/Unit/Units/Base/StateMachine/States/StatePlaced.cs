@@ -16,6 +16,8 @@ namespace Gameplay.UnitControllerStateMachine
             SetPosition(info);
             UpdateColor(info);
 
+            info.boardVisual.UpdateSortingOrder(GameBoardManager.BoardSettings.BoardSortingOrderPlaced);
+
             stateMachine.ChangeState(States.Idle);
         }
 

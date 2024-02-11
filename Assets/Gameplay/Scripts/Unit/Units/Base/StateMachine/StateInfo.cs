@@ -8,9 +8,9 @@ namespace Gameplay.UnitControllerStateMachine
     public class StateInfo : GenericStateInfo
     {
         public Transform transform = null;
-        public SpriteRenderer spriteVisual = null;
-        public Transform trVisual = null;
         public UnitController controller = null;
+        public BoardVisual boardVisual = null;
+        public UnitMovementController movementController = null;
 
         [NonSerialized]
         [HideInInspector]
@@ -19,8 +19,9 @@ namespace Gameplay.UnitControllerStateMachine
         [NonSerialized]
         [HideInInspector]
         public BoardCoordinate targetCoordinate;
+
         [NonSerialized]
         [HideInInspector]
-        public BoardCoordinate[] movePath;
+        public IDamageable attackTarget;
     }
 }

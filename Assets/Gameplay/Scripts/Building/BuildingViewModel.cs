@@ -19,9 +19,10 @@ namespace Gameplay
         public Sprite SpriteBuilding => model.SpriteBuilding;
 
         public bool IsProduceUnits => model.IsProduceUnits;
-
         public BoardCoordinate SpawnPointCoordinate => model.SpawnPointCoordinate;
         public BoardCoordinate SpawnPointOffsetCoordinate => model.SpawnPointOffsetCoordinate;
+
+        public int Health => model.health;
 
         public BuildingViewModel(BuildingModel model)
         {
@@ -43,6 +44,19 @@ namespace Gameplay
                 yield return unitType;
             }
 
+        }
+
+        public void SetHealth(int health) 
+        {
+            model.health = health;
+        }
+
+        public void AddHealth(int healthDelta) 
+        {
+            model.health += healthDelta;
+
+            if (model.health < 0)
+                model.health = 0;
         }
 
     }

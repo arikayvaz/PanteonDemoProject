@@ -241,6 +241,18 @@ namespace Gameplay
 
         private bool Attack(BoardCoordinate coordinate) 
         {
+            IAttacker attackUnit = selectController.GetSelectedObject() as IAttacker;
+
+            if (attackUnit == null)
+                return false;
+
+            IDamageable attackTarget = GameBoardManager.Instance.GetPlacedObject(coordinate) as IDamageable;
+
+            if (attackTarget == null || !attackTarget.IsAlive())
+                return false;
+
+            attackUnit.Attack(attackTarget);
+
             return false;
         }
 

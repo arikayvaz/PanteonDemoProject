@@ -1,3 +1,6 @@
+using Unity.VisualScripting;
+using UnityEngine;
+
 namespace Gameplay
 {
     public struct BoardCoordinate
@@ -51,6 +54,25 @@ namespace Gameplay
         public static BoardCoordinate operator +(BoardCoordinate c1, BoardCoordinate c2) 
         {
             return new BoardCoordinate(c1.x + c2.x, c1.y + c2.y);
+        }
+
+        public static BoardCoordinate operator -(BoardCoordinate c1, BoardCoordinate c2) 
+        {
+            return new BoardCoordinate(c1.x - c2.x, c1.y - c2.y);
+        }
+
+        public static int Distance(BoardCoordinate c1, BoardCoordinate c2) 
+        {
+            int dx = Mathf.Abs(c2.x - c1.x);
+            int dy = Mathf.Abs(c2.y - c1.y);
+
+            int max = Mathf.Max(dx, dy);
+            int min = Mathf.Min(dx, dy);
+
+            int diagonalSteps = min;
+            int straightSteps = max - min;
+
+            return diagonalSteps + straightSteps;
         }
     }
 }

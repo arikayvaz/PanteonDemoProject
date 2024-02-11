@@ -8,6 +8,7 @@ namespace Gameplay
         public string Name => unitData.UnitName;
         public int CellSizeX => unitData.CellSizeX;
         public int CellSizeY => unitData.CellSizeY;
+        public Sprite SpriteUnit => unitData.SpriteUnit;
         public Color UnitColor => unitData.UnitColor;
         public int MoveSpeed => unitData.MoveSpeed;
         public StateColorDataSO StateColorData => unitData.StateColorData;

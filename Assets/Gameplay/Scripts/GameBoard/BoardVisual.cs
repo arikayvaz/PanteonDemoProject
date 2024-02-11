@@ -28,7 +28,7 @@ namespace Gameplay
             float height = boardSizeY * cellSize;
 
             transform.localScale = new Vector3(width, height, 1f);
-            transform.position = new Vector3(width / 2f, height / 2f, 0f);
+            transform.localPosition = new Vector3(width / 2f, height / 2f, 0f);
         }
 
         private void SetVisualSprite(Sprite spriteVisual, Color spriteColor) 

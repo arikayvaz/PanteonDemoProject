@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Gameplay
 {
-    public class UnitController : MonoBehaviour, IPickable, IPlaceable, ISelectable, IMoveable
+    public class UnitController : MonoBehaviour, IPickable, IPlaceable, ISelectable, IMoveable, IAttacker
     {
         public States CurrentState => stateMachine?.State?.StateId ?? States.None;
 
@@ -21,6 +21,8 @@ namespace Gameplay
             }
         }
 
+        public BoardCoordinate Coordinate => stateInfo?.viewModel?.Coordinate ?? BoardCoordinate.Invalid;
+
 
         public void InitController(UnitModel model, BoardCoordinate coordinate)
         {
@@ -30,12 +32,16 @@ namespace Gameplay
 
             InitStateMachine();
 
-            SetVisualSize();
+            stateInfo.boardVisual.InitVisual(stateInfo.viewModel.SpriteUnit
+                , stateInfo.viewModel.UnitColor
+                , stateInfo.viewModel.CellSizeX
+                , stateInfo.viewModel.CellSizeY
+                , GameBoardManager.BoardSettings.CellSize);
         }
 
         public void UpdateVisualColor(Color colorUpdated)
         {
-            stateInfo.spriteVisual.color = colorUpdated;
+            stateInfo.boardVisual.UpdateColor(colorUpdated);
         }
 
         public void Pick()
@@ -81,18 +87,6 @@ namespace Gameplay
         public IEnumerable<BoardCoordinate> GetPlaceCoordinates(bool includeSpawnPoint = false)
         {
             return GetPlaceCoordinates(stateInfo.viewModel.Coordinate);
-            /*
-            if (stateInfo == null || stateInfo.viewModel == null)
-                yield return BoardCoordinate.Invalid;
-
-            for (int y = 0; y < stateInfo.viewModel.CellSizeY; y++)
-            {
-                for (int x = 0; x < stateInfo.viewModel.CellSizeX; x++)
-                {
-                    yield return new BoardCoordinate(stateInfo.viewModel.Coordinate.x + x, stateInfo.viewModel.Coordinate.y + y);
-                }
-            }
-            */
         }
 
         private void InitStateMachine()
@@ -117,11 +111,6 @@ namespace Gameplay
         public void TerminateCoroutine(IEnumerator enumerator) 
         {
             StopCoroutine(enumerator);
-        }
-
-        private void SetVisualSize()
-        {
-            stateInfo.trVisual.localScale = new Vector3(stateInfo.viewModel.CellSizeX, stateInfo.viewModel.CellSizeY, 1f);
         }
 
         private void UpdatePosition()
@@ -177,9 +166,13 @@ namespace Gameplay
         public void Move(BoardCoordinate targetCoordinate)
         {
             stateInfo.targetCoordinate = targetCoordinate;
-            stateInfo.movePath = Pathfinder.Instance.CalculatePathCoordinates(stateInfo.viewModel.Coordinate, targetCoordinate).ToArray();
-
             ChangeState(States.MovingToPosition);
+        }
+
+        public void Attack(IDamageable target) 
+        {
+            stateInfo.attackTarget = target;
+            ChangeState(States.MovingToTarget);
         }
     }
 }
