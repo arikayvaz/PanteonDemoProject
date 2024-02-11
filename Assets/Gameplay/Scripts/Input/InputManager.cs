@@ -32,9 +32,20 @@ namespace Gameplay
                 if (IsPointerOverUIObject())
                     return;
 
-                BoardCoordinate coord = GetCoordinateFromInputPosition(Input.mousePosition);
+                BoardCoordinate coordinate = GetCoordinateFromInputPosition(Input.mousePosition);
 
-                HandleLeftClickInput(coord);
+                HandleLeftClickInput(coordinate);
+                return;
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (IsPointerOverUIObject())
+                    return;
+
+                BoardCoordinate coordinate = GetCoordinateFromInputPosition(Input.mousePosition);
+
+                HandleRightClickInput(coordinate);
                 return;
             }
         }
@@ -47,6 +58,11 @@ namespace Gameplay
                 return;
 
             isHandled = UnitManager.Instance.HandleLeftClickInput(coordinate);
+        }
+
+        private void HandleRightClickInput(BoardCoordinate coordinate) 
+        {
+            bool isHandled = UnitManager.Instance.HandleRightClickInput(coordinate);
         }
 
         private BoardCoordinate GetCoordinateFromInputPosition(Vector2 inputPos) 

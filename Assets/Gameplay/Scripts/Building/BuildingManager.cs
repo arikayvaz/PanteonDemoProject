@@ -257,6 +257,9 @@ namespace Gameplay
 
         private bool IsPlaceableValid(IPlaceable placeable) 
         {
+            if (placeable == null)
+                return false;
+
             return (placeable as BuildingController) != null;
         }
     }

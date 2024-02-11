@@ -34,7 +34,8 @@ namespace Common
             if (list == null)
                 list = new List<GameObject>();
 
-            defaultGo.transform.parent = transform;
+            //defaultGo.transform.parent = transform;
+            defaultGo.transform.SetParent(transform);
 
             list.Add(defaultGo);
 
@@ -43,7 +44,8 @@ namespace Common
                 GameObject go = Instantiate(defaultGo);
                 go.SetActive(false);
 
-                go.transform.parent = transform;
+                //go.transform.parent = transform;
+                go.transform.SetParent(transform);
 
                 list.Add(go);
             }
@@ -64,7 +66,7 @@ namespace Common
                 go = Instantiate(defaultGo);
 
                 if (parent != null)
-                    go.transform.parent = parent;
+                    go.transform.SetParent(parent);
 
                 go.SetActive(false);
 
@@ -84,7 +86,7 @@ namespace Common
 
 
             go = Instantiate(defaultGo);
-            go.transform.parent = transform;
+            go.transform.SetParent(transform);
             go.SetActive(false);
 
             list.Add(go);

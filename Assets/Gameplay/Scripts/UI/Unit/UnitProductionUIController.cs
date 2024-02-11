@@ -57,7 +57,8 @@ namespace Gameplay
 
                 item.InitItem(data.UnitType, data.SpriteUnit, data.UnitColor, onItemClick);
 
-                item.transform.parent = trLayout;
+                //item.transform.parent = trLayout;
+                item.transform.SetParent(trLayout);
 
                 item.gameObject.SetActive(true);
 

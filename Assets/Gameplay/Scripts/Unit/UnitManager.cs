@@ -53,30 +53,40 @@ namespace Gameplay
         {
             bool isCoordinateInBoardBounds = GameBoardManager.Instance.IsCoordinateInBoardBounds(coordinate);
             bool isCoordinatePlaceable = GameBoardManager.Instance.IsCoordinatePlaceable(coordinate);
+            IPlaceable placeable = null;
 
             if (selectController.IsSelectedObject)
             {
-                if (!isCoordinateInBoardBounds) 
+                if (!isCoordinateInBoardBounds)
                 {
                     DeselectUnit();
                     return false;
                 }
 
-                if (isCoordinatePlaceable) 
+                if (!isCoordinatePlaceable)
                 {
-                    MoveToCoordinate(coordinate);
-                    return true;
+                    placeable = GameBoardManager.Instance.GetPlacedObject(coordinate);
+
+                    if (!IsPlaceableValid(placeable)) 
+                    {
+                        DeselectUnit();
+                        return false;
+                    }
+                    else
+                    {
+                        DeselectUnit();
+                        return SelectUnit(coordinate);
+                    }
                 }
 
-                bool isAttackSuccess = Attack(coordinate);
-
-                return isAttackSuccess;
+                DeselectUnit();
+                return false;
             }
 
             if (!isCoordinateInBoardBounds || isCoordinatePlaceable)
                 return false;
 
-            IPlaceable placeable = GameBoardManager.Instance.GetPlacedObject(coordinate);
+            placeable = GameBoardManager.Instance.GetPlacedObject(coordinate);
 
             if (!IsPlaceableValid(placeable))
                 return false;
@@ -84,6 +94,28 @@ namespace Gameplay
             bool isSelectSuccess = SelectUnit(coordinate);
 
             return isSelectSuccess;
+        }
+
+        public bool HandleRightClickInput(BoardCoordinate coordinate) 
+        {
+            if (!selectController.IsSelectedObject)
+                return false;
+
+            bool isCoordinateInBoardBounds = GameBoardManager.Instance.IsCoordinateInBoardBounds(coordinate);
+            bool isCoordinatePlaceable = GameBoardManager.Instance.IsCoordinatePlaceable(coordinate);
+
+            if (!isCoordinateInBoardBounds)
+                return false;
+
+            if (isCoordinatePlaceable)
+            {
+                MoveToCoordinate(coordinate);
+                return true;
+            }
+            else
+            {
+                return Attack(coordinate);
+            }
         }
 
         public void ProduceUnit(UnitTypes unitType, BoardCoordinate coordinate) 
@@ -262,6 +294,9 @@ namespace Gameplay
 
         private bool IsPlaceableValid(IPlaceable placeable) 
         {
+            if (placeable == null)
+                return false;
+
             return (placeable as UnitController) != null;
         }
     }
