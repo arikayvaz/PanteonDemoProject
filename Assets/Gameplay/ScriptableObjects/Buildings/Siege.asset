@@ -20,6 +20,6 @@ MonoBehaviour:
   <SpriteBuilding>k__BackingField: {fileID: 21300000, guid: 91aa51f154be9764b87025133e0b6837, type: 3}
   <BuildingColor>k__BackingField: {r: 1, g: 0.7411765, b: 0.34509805, a: 1}
   <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}
-  producibleUnits: 
-  <SpawnPointCoordinateOffsetX>k__BackingField: 0
-  <SpawnPointCoordinateOffsetY>k__BackingField: 0
+  producibleUnits: 04000000
+  <SpawnPointCoordinateOffsetX>k__BackingField: -1
+  <SpawnPointCoordinateOffsetY>k__BackingField: 1

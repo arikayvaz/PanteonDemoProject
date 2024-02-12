@@ -19,7 +19,7 @@ MonoBehaviour:
   <Health>k__BackingField: 10
   <AttackDamage>k__BackingField: 2
   <AttackDelay>k__BackingField: 0.2
-  <MoveSpeed>k__BackingField: 2
+  <MoveSpeed>k__BackingField: 4
   <SpriteUnit>k__BackingField: {fileID: 21300000, guid: 4ff03f56ac722934faf41a059638bb17, type: 3}
   <UnitColor>k__BackingField: {r: 1, g: 0.14509803, b: 0.31193247, a: 1}
   <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}
