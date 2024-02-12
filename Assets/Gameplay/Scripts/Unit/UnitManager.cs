@@ -120,8 +120,8 @@ namespace Gameplay
 
         public void ProduceUnit(UnitTypes unitType, BoardCoordinate coordinate) 
         {
-            PickUnit(unitType, coordinate);
-            PlaceUnit(coordinate);
+            //PickUnit(unitType, coordinate);
+            PlaceUnit(unitType, coordinate);
         }
 
         #region Spawning
@@ -177,15 +177,34 @@ namespace Gameplay
 
         #region Placing
 
-        public void PlaceUnit(BoardCoordinate placeCoordinate)
+        public void PlaceUnit(UnitTypes unitType, BoardCoordinate placeCoordinate)
         {
+            /*
             if (!pickController.IsPickedUnit)
                 return;
+            */
 
-            bool isPlacingSuccess = placeController.PlaceUnit(pickController.PickedUnit, placeCoordinate);
+            if (!GameBoardManager.Instance.IsCoordinatePlaceable(placeCoordinate))
+                return;
 
+            UnitDataSO unitData = GetUnitData(unitType);
+
+            if (unitData == null)
+                return;
+
+            UnitModel model = new UnitModel(unitData);
+
+            UnitController unit = spawnController.SpawnUnit(model, placeCoordinate);
+
+            if (unit == null)
+                return;
+
+            placeController.PlaceUnit(unit, placeCoordinate);
+
+            /*
             if (isPlacingSuccess)
                 pickController.DropObject();
+            */
 
         }
 
