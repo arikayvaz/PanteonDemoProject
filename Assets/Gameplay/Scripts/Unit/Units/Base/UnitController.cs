@@ -169,8 +169,9 @@ namespace Gameplay
             ChangeState(States.MovingToPosition);
         }
 
-        public void Attack(IDamageable target) 
+        public void Attack(BoardCoordinate attackCoordinate, IDamageable target) 
         {
+            stateInfo.targetCoordinate = attackCoordinate;
             stateInfo.attackTarget = target;
             ChangeState(States.MovingToTarget);
         }

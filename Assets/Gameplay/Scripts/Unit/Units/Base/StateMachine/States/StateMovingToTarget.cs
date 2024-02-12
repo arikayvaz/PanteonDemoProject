@@ -16,7 +16,7 @@ namespace Gameplay.UnitControllerStateMachine
         {
             base.OnEnter(info);
 
-            info.targetCoordinate = info.attackTarget.GetCoordinate();//info.attackTarget.GetAttackableCoordinate();
+            //info.targetCoordinate = info.attackTarget.GetCoordinate();//info.attackTarget.GetAttackableCoordinate();
 
             if (info.targetCoordinate == BoardCoordinate.Invalid)
             {

@@ -4,7 +4,7 @@ namespace Gameplay
 {
     public interface IAttacker
     {
-        public void Attack(IDamageable target) 
+        public void Attack(BoardCoordinate attackCoordinate, IDamageable target) 
         {
 
         }

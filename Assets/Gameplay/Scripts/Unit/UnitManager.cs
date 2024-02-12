@@ -258,7 +258,7 @@ namespace Gameplay
             if (attackTarget == null || !attackTarget.IsAlive())
                 return false;
 
-            attackUnit.Attack(attackTarget);
+            attackUnit.Attack(coordinate, attackTarget);
 
             return false;
         }
