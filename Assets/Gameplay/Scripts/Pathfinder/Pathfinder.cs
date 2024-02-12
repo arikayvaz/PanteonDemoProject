@@ -70,6 +70,7 @@ namespace Gameplay
         {
             PathNode startNode = grid[start.x, start.y];
             PathNode endNode = grid[end.x, end.y];
+            PathNode closestNode = null;
 
             openList = new List<PathNode>() { startNode };
             closedList = new List<PathNode>();
@@ -110,6 +111,12 @@ namespace Gameplay
                         neighbour.gCost = tentativeGCost;
                         neighbour.hCost = CalculateDistanceCost(neighbour, endNode);
 
+                        if (closestNode == null)
+                            closestNode = neighbour;
+
+                        if (neighbour.hCost < closestNode.hCost)
+                            closestNode = neighbour;
+
                         if (!openList.Contains(neighbour))
                         {
                             openList.Add(neighbour);
@@ -118,6 +125,9 @@ namespace Gameplay
                 }//foreach (PathNode neighbour in GetNeighbours(currentNode))
 
             }//while (openList.Count > 0)
+
+            if (!endNode.isWalkable && closestNode != null)
+                return CalculatePath(closestNode);
 
             return null;
         }

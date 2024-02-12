@@ -11,9 +11,6 @@ namespace Gameplay
         virtual void GetDamage(int damage) 
         {
             AddHealth(-damage);
-
-            if (GetHealth() <= 0)
-                OnDied();
         }
         void OnDied();
         BoardCoordinate GetCoordinate();

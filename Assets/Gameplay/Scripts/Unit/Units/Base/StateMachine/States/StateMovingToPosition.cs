@@ -18,22 +18,12 @@ namespace Gameplay.UnitControllerStateMachine
         {
             base.OnEnter(info);
 
-            Debug.Log("Start moving");
-
             info.movementController.MoveForWandering(info.controller
                 , info.viewModel.MoveSpeed
                 , info.viewModel.Coordinate
                 , info.targetCoordinate
                 , (coordinate) => OnMoved(info, coordinate)
                 , () => OnMovementComplete(info));
-        }
-
-        public override void OnExit(StateInfo info)
-        {
-            base.OnExit(info);
-
-            Debug.Log("End moving");
-
         }
 
         private void OnMoved(StateInfo info, BoardCoordinate coordinate) 

@@ -21,6 +21,7 @@ namespace Gameplay.UnitControllerStateMachine
 
         private void OnTargetDied(StateInfo info) 
         {
+            info.attackTarget.OnDied();
             info.attackTarget = null;
 
             stateMachine.ChangeState(States.Idle);
