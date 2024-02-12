@@ -1,4 +1,5 @@
 using Common;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,6 +8,7 @@ namespace Gameplay
 {
     public class BuildingProductionUIController : MonoBehaviour, IController
     {
+        [SerializeField] InfiniteScrollView scrollView = null;
         [SerializeField] BuildingProductionSelectItem[] items = null;
 
         private UnityEvent<BuildingTypes> onItemClick;
@@ -14,6 +16,7 @@ namespace Gameplay
         public void InitController() 
         {
             InitItems();
+            scrollView.InitScrollView();
         }
 
         private void InitItems() 
@@ -26,19 +29,23 @@ namespace Gameplay
             onItemClick = new UnityEvent<BuildingTypes>();
             onItemClick.AddListener(OnItemClicked);
 
-            for (int i = 0; i < items.Length; i++)
+            if (datas.Length != items.Length)
+            {
+                Debug.LogError("Items and datas size different!");
+                return;
+            }
+
+            for (int i = 0; i < datas.Length; i++)
             {
                 BuildingProductionSelectItem item = items[i];
 
-                if (i > datas.Length - 1)
-                {
-                    item.gameObject.SetActive(false);
+                if (item == null)
                     continue;
-                }
 
                 BuildingDataSO data = datas[i];
 
                 item.InitItem(data.BuildingType, data.BuildingName, data.SpriteBuilding, data.BuildingColor, onItemClick);
+                item.gameObject.name = "BPSI_" + data.BuildingName;
             }
         }
 
