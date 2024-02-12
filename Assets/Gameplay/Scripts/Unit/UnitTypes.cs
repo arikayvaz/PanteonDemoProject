@@ -5,6 +5,8 @@ namespace Gameplay
         None = -1,
         Soldier00,
         Soldier01,
-        Soldier02
+        Soldier02,
+        Cavalry,
+        Cannon
     }
 }

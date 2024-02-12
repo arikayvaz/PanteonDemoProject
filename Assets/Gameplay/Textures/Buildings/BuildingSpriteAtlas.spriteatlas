@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BuildingSpriteAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: ede92d1c23a57c1438c0b8690aeeff5b, type: 3}
+    - {fileID: 2800000, guid: 39ca9c9f178763542b8f92d78bffee23, type: 3}
+    - {fileID: 2800000, guid: a4f9e5aaa998bfa498b506596c519d57, type: 3}
+    - {fileID: 2800000, guid: 939e1ed35dc45ad4e9e1d906b3d51d36, type: 3}
+    - {fileID: 2800000, guid: 91aa51f154be9764b87025133e0b6837, type: 3}
+    - {fileID: 2800000, guid: e528c8c199229e8419e7f27cbb021ae2, type: 3}
+    - {fileID: 2800000, guid: a00cb6e892e550f4ba048de4f08cf7d6, type: 3}
+    - {fileID: 2800000, guid: ca9521bb67499e64ab8952762c056c5c, type: 3}
+    - {fileID: 2800000, guid: 734a24be063601f46a259d4220968943, type: 3}
+    - {fileID: 2800000, guid: 4f24fc1b6c638fc4ea726fa650bd4b18, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: e528c8c199229e8419e7f27cbb021ae2, type: 3}
+  - {fileID: 21300000, guid: 91aa51f154be9764b87025133e0b6837, type: 3}
+  - {fileID: 21300000, guid: 939e1ed35dc45ad4e9e1d906b3d51d36, type: 3}
+  - {fileID: 21300000, guid: a00cb6e892e550f4ba048de4f08cf7d6, type: 3}
+  - {fileID: 21300000, guid: a4f9e5aaa998bfa498b506596c519d57, type: 3}
+  - {fileID: 21300000, guid: 4f24fc1b6c638fc4ea726fa650bd4b18, type: 3}
+  - {fileID: 21300000, guid: ca9521bb67499e64ab8952762c056c5c, type: 3}
+  - {fileID: 21300000, guid: ede92d1c23a57c1438c0b8690aeeff5b, type: 3}
+  - {fileID: 21300000, guid: 734a24be063601f46a259d4220968943, type: 3}
+  - {fileID: 21300000, guid: 39ca9c9f178763542b8f92d78bffee23, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - texture_stable
+  - texture_siege
+  - texture_power_plant
+  - texture_watchtower
+  - texture_house
+  - texture_spawn_point
+  - texture_well
+  - texture_barracks
+  - texture_windmill
+  - texture_church
+  m_RenderDataMap: {}
+  m_Tag: BuildingSpriteAtlas
+  m_IsVariant: 0

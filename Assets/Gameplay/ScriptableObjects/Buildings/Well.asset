@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 630467d5d3022424fa957c053a6e5fce, type: 3}
-  m_Name: Stable
+  m_Name: Well
   m_EditorClassIdentifier: 
-  <BuildingType>k__BackingField: 4
-  <BuildingName>k__BackingField: Stable
-  <CellSizeX>k__BackingField: 4
-  <CellSizeY>k__BackingField: 2
+  <BuildingType>k__BackingField: 6
+  <BuildingName>k__BackingField: Well
+  <CellSizeX>k__BackingField: 1
+  <CellSizeY>k__BackingField: 1
   <Health>k__BackingField: 100
-  <SpriteBuilding>k__BackingField: {fileID: 21300000, guid: e528c8c199229e8419e7f27cbb021ae2, type: 3}
+  <SpriteBuilding>k__BackingField: {fileID: 21300000, guid: ca9521bb67499e64ab8952762c056c5c, type: 3}
   <BuildingColor>k__BackingField: {r: 1, g: 0.7411765, b: 0.34509805, a: 1}
   <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}
-  producibleUnits: 03000000
-  <SpawnPointCoordinateOffsetX>k__BackingField: 4
+  producibleUnits: 
+  <SpawnPointCoordinateOffsetX>k__BackingField: 0
   <SpawnPointCoordinateOffsetY>k__BackingField: 0

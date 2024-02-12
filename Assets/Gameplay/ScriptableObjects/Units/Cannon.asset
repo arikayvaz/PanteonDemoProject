@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96b48a3cf70833e4ebcf28d6ba131d12, type: 3}
-  m_Name: Soldier01
+  m_Name: Cannon
   m_EditorClassIdentifier: 
-  <UnitType>k__BackingField: 1
-  <UnitName>k__BackingField: Soldier01
+  <UnitType>k__BackingField: 4
+  <UnitName>k__BackingField: Cannon
   <CellSizeX>k__BackingField: 1
   <CellSizeY>k__BackingField: 1
   <Health>k__BackingField: 10
-  <AttackDamage>k__BackingField: 5
+  <AttackDamage>k__BackingField: 2
   <AttackDelay>k__BackingField: 0.2
   <MoveSpeed>k__BackingField: 2
-  <SpriteUnit>k__BackingField: {fileID: 21300000, guid: 1f8ebb1d9b8651a46ae88695dcb406fc, type: 3}
-  <UnitColor>k__BackingField: {r: 1, g: 0.14509805, b: 0.3137255, a: 1}
+  <SpriteUnit>k__BackingField: {fileID: 21300000, guid: 1d8d061432854bf409a8cc0e14763b03, type: 3}
+  <UnitColor>k__BackingField: {r: 1, g: 0.14509803, b: 0.31193247, a: 1}
   <StateColorData>k__BackingField: {fileID: 11400000, guid: dbd2a5ba034e09b45a02cc1bf8ee0ab6, type: 2}
