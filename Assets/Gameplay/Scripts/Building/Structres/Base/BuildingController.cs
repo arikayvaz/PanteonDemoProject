@@ -48,6 +48,8 @@ namespace Gameplay
             InitStateMachine();
 
             InitBoardVisual();
+            InitBuildingNameText();
+
             UpdatePosition();
 
             if (stateInfo.viewModel.IsProduceUnits)
@@ -89,6 +91,19 @@ namespace Gameplay
                 , stateInfo.viewModel.CellSizeX
                 , stateInfo.viewModel.CellSizeY
                 , GameBoardManager.BoardSettings.CellSize);
+        }
+
+        private void InitBuildingNameText() 
+        {
+            stateInfo.textBuildingName.text = stateInfo.viewModel.Name;
+
+            RectTransform rt = stateInfo.textBuildingName.transform as RectTransform;
+
+            float width = stateInfo.viewModel.CellSizeX * GameBoardManager.BoardSettings.CellSize;
+            float height = stateInfo.viewModel.CellSizeY * GameBoardManager.BoardSettings.CellSize;
+
+            rt.sizeDelta = new Vector2(width, height);
+            rt.localPosition = new Vector3(width * 0.5f, height * 0.5f, 0f);
         }
 
         private void UpdatePosition() 

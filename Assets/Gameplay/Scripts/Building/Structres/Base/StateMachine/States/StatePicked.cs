@@ -22,6 +22,7 @@ namespace Gameplay.BuildingControllerStateMachine
             UpdatePosition(info);
 
             info.boardVisual.UpdateSortingOrder(GameBoardManager.BoardSettings.BoardSortingOrderPicked);
+            info.textBuildingName.sortingOrder = GameBoardManager.BoardSettings.BoardSortingOrderPicked;
 
             if (info.viewModel.IsProduceUnits)
                 info.spawnPoint.OnPicked();

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Common.GenericStateMachine;
+using TMPro;
 
 namespace Gameplay.BuildingControllerStateMachine
 {
@@ -10,6 +11,7 @@ namespace Gameplay.BuildingControllerStateMachine
         public Transform transform = null;
         public BuildingController controller = null;
         public BoardVisual boardVisual = null;
+        public TextMeshPro textBuildingName = null;
         public SpawnPoint spawnPoint = null;
 
         [HideInInspector]
