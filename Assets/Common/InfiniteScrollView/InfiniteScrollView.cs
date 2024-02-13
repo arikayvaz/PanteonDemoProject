@@ -10,7 +10,7 @@ namespace Common
         [SerializeField] ScrollRect scrollRect = null;
         [SerializeField] GridLayoutGroup layoutGroup = null;
         [SerializeField] RectTransform rectTransform = null;
-        [SerializeField] float outOfBoundsThreshold = 0f;
+        [SerializeField] float outOfBoundsThreshold = 0.1f;
 
         public Transform ScrollContentTransform => scrollRect.content.transform;
 
@@ -44,11 +44,11 @@ namespace Common
             topPosition = rectTransform.position.y + height * 0.5f;
             bottomPosition = rectTransform.position.y - height * 0.5f;
 
-            topThreshold = scrollRect.content.GetChild(0).transform.position.y + outOfBoundsThreshold;
-            bottomThreshold = scrollRect.content.GetChild(childCount - 1).transform.position.y - outOfBoundsThreshold;
-
             itemSpacing = layoutGroup.spacing.y;
             childHeight = (scrollRect.content.GetChild(0).transform as RectTransform).rect.height;
+
+            topThreshold = scrollRect.content.GetChild(0).transform.position.y + outOfBoundsThreshold;
+            bottomThreshold = scrollRect.content.GetChild(childCount - 1).transform.position.y - outOfBoundsThreshold;
 
             layoutGroup.enabled = false;
         }
@@ -63,7 +63,7 @@ namespace Common
 
             int endItemIndex = isSlidingTop ? childCount - 1 : 0;
             Transform endItem = scrollRect.content.GetChild(endItemIndex);
-            Vector2 enItemPos = endItem.position;
+            Vector2 enItemPos = endItem.localPosition;
 
             Vector2 newPos = enItemPos;
 
@@ -73,7 +73,7 @@ namespace Common
                 newPos.y = enItemPos.y + childHeight + itemSpacing;
 
 
-            currentItem.position = newPos;
+            currentItem.localPosition = newPos;
             currentItem.SetSiblingIndex(endItemIndex);
         }
 
