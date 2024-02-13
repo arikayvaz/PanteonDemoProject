@@ -14,11 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <UnitType>k__BackingField: 1
   <UnitName>k__BackingField: Soldier01
-  <CellSizeX>k__BackingField: 1
-  <CellSizeY>k__BackingField: 1
   <Health>k__BackingField: 10
   <AttackDamage>k__BackingField: 5
-  <AttackDelay>k__BackingField: 0.2
+  <AttackDelay>k__BackingField: 0.5
   <MoveSpeed>k__BackingField: 2
   <SpriteUnit>k__BackingField: {fileID: 21300000, guid: 1f8ebb1d9b8651a46ae88695dcb406fc, type: 3}
   <UnitColor>k__BackingField: {r: 1, g: 0.14509805, b: 0.3137255, a: 1}
