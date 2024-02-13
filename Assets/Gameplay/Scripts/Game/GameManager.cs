@@ -6,6 +6,8 @@ namespace Gameplay
 {
     public class GameManager : Singleton<GameManager>, IManager
     {
+        public bool IsGameRunning => stateMachine?.State?.StateId == States.Game;
+
         [SerializeField] StateInfo stateInfo = new StateInfo();
 
         private StateMachine stateMachine;

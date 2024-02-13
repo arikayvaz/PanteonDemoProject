@@ -25,6 +25,9 @@ namespace Gameplay
             if (!isInitialized)
                 return;
 
+            if (!GameManager.Instance.IsGameRunning)
+                return;
+
             CalculateWorldPosition(Input.mousePosition);
 
             if (Input.GetMouseButtonDown(0))

@@ -7,8 +7,8 @@ namespace Gameplay
     {
         [field: SerializeField] public UnitTypes UnitType { get; private set; } = UnitTypes.None;
         [field: SerializeField] public string UnitName { get; private set; } = "";
-        [field: SerializeField, Min(0)] public int CellSizeX { get; private set; } = 0;
-        [field: SerializeField, Min(0)] public int CellSizeY { get; private set; } = 0;
+        public int CellSizeX => 1;
+        public int CellSizeY => 1;
         [field: SerializeField, Min(0)] public int Health { get; private set; } = 0;
         [field: SerializeField, Min(0)] public int AttackDamage { get; private set; } = 0;
         [field: SerializeField, Min(0.01f)] public float AttackDelay { get; private set; } = 0;

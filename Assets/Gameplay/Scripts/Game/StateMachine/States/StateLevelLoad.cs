@@ -25,6 +25,8 @@ namespace Gameplay.GameManagerStateMachine
             UnitManager.Instance.InitManager();
 
             GameUIController.Instance.InitController();
+
+            stateMachine.ChangeState(States.Game);
         }
     }
 }
