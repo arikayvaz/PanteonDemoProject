@@ -126,7 +126,7 @@ namespace Gameplay
 
             }//while (openList.Count > 0)
 
-            if (!endNode.isWalkable && closestNode != null)
+            if (closestNode != null)
                 return CalculatePath(closestNode);
 
             return null;
