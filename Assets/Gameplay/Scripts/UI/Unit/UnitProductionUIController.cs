@@ -59,6 +59,7 @@ namespace Gameplay
 
                 //item.transform.parent = trLayout;
                 item.transform.SetParent(trLayout);
+                item.transform.localScale = Vector3.one;
 
                 item.gameObject.SetActive(true);
 
