@@ -26,6 +26,9 @@ namespace Gameplay.GameManagerStateMachine
 
             GameUIController.Instance.InitController();
 
+            BuildingManager.Instance.SubscribeUIEvents();
+            UnitManager.Instance.SubscribeUIEvents();
+
             stateMachine.ChangeState(States.Game);
         }
     }

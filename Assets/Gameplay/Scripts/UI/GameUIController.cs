@@ -1,6 +1,7 @@
 using Common;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gameplay
 {
@@ -17,9 +18,12 @@ namespace Gameplay
         public float GameViewStartPct => rectTrLeftSide.anchorMax.x;
         public float GameViewEndPct => rectTrRightSide.anchorMin.x;
 
+        public UnityEvent<BuildingTypes> OnBuildingProduced { get; private set; } = null;
+
         public void InitController() 
         {
-            buildingProductionController.InitController();
+            OnBuildingProduced = new UnityEvent<BuildingTypes>();
+            buildingProductionController.InitController(OnBuildingProduced);
             buildingInformationController.InitController();
             unitProductionController.InitController();
         }

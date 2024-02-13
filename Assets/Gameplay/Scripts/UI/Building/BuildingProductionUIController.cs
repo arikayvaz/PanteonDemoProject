@@ -7,16 +7,19 @@ using UnityEngine.Events;
 
 namespace Gameplay
 {
-    public class BuildingProductionUIController : MonoBehaviour, IController
+    public class BuildingProductionUIController : MonoBehaviour
     {
         [SerializeField] InfiniteScrollView scrollView = null;
         [SerializeField] BuildingProductionSelectItem selectItem = null;
 
         private UnityEvent<BuildingTypes> onItemClick;
+        private UnityEvent<BuildingTypes> onItemProduced;
 
-        public void InitController() 
+        public void InitController(UnityEvent<BuildingTypes> onItemProduced) 
         {
             InitItems();
+
+            this.onItemProduced = onItemProduced;
         }
 
         private void InitItems() 
@@ -52,6 +55,7 @@ namespace Gameplay
         private void OnItemClicked(BuildingTypes buildingType) 
         {
             BuildingManager.Instance.PickBuilding(buildingType);
+            onItemProduced?.Invoke(buildingType);
         }
 
     }

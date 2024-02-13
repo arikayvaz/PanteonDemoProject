@@ -47,6 +47,11 @@ namespace Gameplay
             UnitManager.Instance.OnUnitSelected.AddListener(OnUnitSelected);
         }
 
+        public void SubscribeUIEvents() 
+        {
+            GameUIController.Instance.OnBuildingProduced.AddListener(OnBuildingProduced);
+        }
+
         public bool HandleLeftClickInput(BoardCoordinate coordinate)
         {
             bool isCoordinateInBoardBounds = GameBoardManager.Instance.IsCoordinateInBoardBounds(coordinate);
@@ -268,6 +273,12 @@ namespace Gameplay
                 return false;
 
             return (placeable as BuildingController) != null;
+        }
+
+        private void OnBuildingProduced(BuildingTypes buildingType) 
+        {
+            if (selectController.IsSelectedObject)
+                selectController.DeselectObject();
         }
     }
 }
