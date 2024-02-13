@@ -13,7 +13,7 @@ namespace Gameplay
         public static GameBoardSettingsSO BoardSettings => Instance?.boardSettings;
 
         [Space]
-        [SerializeField] GameObject goCell = null;
+        [SerializeField] Pooler poolerCell = null;
 
         private IPlaceable[,] placedObjects = null;
 
@@ -177,15 +177,32 @@ namespace Gameplay
 
         private void SpawnBoardCells() 
         {
+            poolerCell.poolCount = boardSettings.BoardSize.x * boardSettings.BoardSize.y;
+
             for (int y = 0; y < boardSettings.BoardSize.y; y++)
             {
                 for (int x = 0; x < boardSettings.BoardSize.x; x++)
                 {
+                    /*
                     Vector2 pos = new Vector2(x, y) * boardSettings.CellSize;
                     GameObject cell = Instantiate(goCell, pos, Quaternion.identity);
                     cell.name = $"Cell_({x},{y})";
 
                     SpriteRenderer rend = cell.GetComponentInChildren<SpriteRenderer>();
+                    rend.color = (x + y) % 2 == 0 ? UnityEngine.Color.white : UnityEngine.Color.black;
+                    */
+
+                    GameObject goCell = poolerCell.GetGo();
+
+                    if (goCell == null)
+                        break;
+
+                    goCell.SetActive(true);
+                    Vector2 position = new Vector2(x, y) * boardSettings.CellSize;
+                    goCell.transform.position = position;
+
+                    goCell.name = $"Cell_({x},{y})";
+                    SpriteRenderer rend = goCell.GetComponentInChildren<SpriteRenderer>();
                     rend.color = (x + y) % 2 == 0 ? UnityEngine.Color.white : UnityEngine.Color.black;
                 }
             }
@@ -227,20 +244,6 @@ namespace Gameplay
 
             foreach (BoardCoordinate coordinate in coordinates)
             {
-                /*
-                if (coordinate.x < minX)
-                    minX = coordinate.x;
-
-                if (coordinate.x > maxX)
-                    maxX = coordinate.x;
-
-                if (coordinate.y < minY)
-                    minY = coordinate.y;
-
-                if (coordinate.y > maxY)
-                    maxY = coordinate.y;
-                */
-
                 minX = Mathf.Min(minX, coordinate.x);
                 maxX = Mathf.Max(maxX, coordinate.x);
                 minY = Mathf.Min(minY, coordinate.y);
