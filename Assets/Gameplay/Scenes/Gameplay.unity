@@ -343,7 +343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1388788934327148890, guid: a37eada81c0b8c148b4405b357d79b60, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1262
+      value: -1460
       objectReference: {fileID: 0}
     - target: {fileID: 1388788934327148890, guid: a37eada81c0b8c148b4405b357d79b60, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1577,7 +1577,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.1254902, g: 0.38431373, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -3367,7 +3367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1388788934327148890, guid: a37eada81c0b8c148b4405b357d79b60, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1262
+      value: -1658
       objectReference: {fileID: 0}
     - target: {fileID: 1388788934327148890, guid: a37eada81c0b8c148b4405b357d79b60, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5657,7 +5657,7 @@ MonoBehaviour:
   scrollRect: {fileID: 2056328429}
   layoutGroup: {fileID: 235541381}
   rectTransform: {fileID: 2056328428}
-  outOfBoundsThreshold: 40
+  outOfBoundsThreshold: 100
 --- !u!1 &2096233210
 GameObject:
   m_ObjectHideFlags: 0
