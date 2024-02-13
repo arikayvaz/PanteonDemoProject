@@ -1,6 +1,7 @@
 using Common;
 using System.Collections;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,14 +10,13 @@ namespace Gameplay
     public class BuildingProductionUIController : MonoBehaviour, IController
     {
         [SerializeField] InfiniteScrollView scrollView = null;
-        [SerializeField] BuildingProductionSelectItem[] items = null;
+        [SerializeField] BuildingProductionSelectItem selectItem = null;
 
         private UnityEvent<BuildingTypes> onItemClick;
 
         public void InitController() 
         {
             InitItems();
-            scrollView.InitScrollView();
         }
 
         private void InitItems() 
@@ -29,24 +29,24 @@ namespace Gameplay
             onItemClick = new UnityEvent<BuildingTypes>();
             onItemClick.AddListener(OnItemClicked);
 
-            if (datas.Length != items.Length)
+            scrollView.InitScrollView(selectItem.gameObject, datas.Length, (spawnedItems) => 
             {
-                Debug.LogError("Items and datas size different!");
-                return;
-            }
+                int index = 0;
+                foreach (GameObject goSpawnedItem in spawnedItems)
+                {
+                    BuildingProductionSelectItem item = goSpawnedItem.GetComponent<BuildingProductionSelectItem>();
 
-            for (int i = 0; i < datas.Length; i++)
-            {
-                BuildingProductionSelectItem item = items[i];
+                    if (item == null)
+                        continue;
 
-                if (item == null)
-                    continue;
+                    BuildingDataSO data = datas[index];
 
-                BuildingDataSO data = datas[i];
+                    item.InitItem(data.BuildingType, data.BuildingName, data.SpriteBuilding, data.BuildingColor, onItemClick);
+                    item.gameObject.name = "BPSI_" + data.BuildingName;
 
-                item.InitItem(data.BuildingType, data.BuildingName, data.SpriteBuilding, data.BuildingColor, onItemClick);
-                item.gameObject.name = "BPSI_" + data.BuildingName;
-            }
+                    index++;
+                }
+            });
         }
 
         private void OnItemClicked(BuildingTypes buildingType) 

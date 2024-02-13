@@ -1,4 +1,7 @@
 using Gameplay;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -35,7 +38,12 @@ namespace Common
             scrollRect?.onValueChanged.RemoveListener(HandleScroll);
         }
 
-        public void InitScrollView() 
+        public void InitScrollView(GameObject goScrollItem, int scrollItemCount, Action<IEnumerable<GameObject>> onComplete) 
+        {
+            StartCoroutine(StartInitSequence(goScrollItem, scrollItemCount, onComplete));
+        }
+
+        private void InitScrollVariables() 
         {
             scrollRect.movementType = ScrollRect.MovementType.Unrestricted;
             height = rectTransform.rect.height;
@@ -49,8 +57,39 @@ namespace Common
 
             topThreshold = scrollRect.content.GetChild(0).transform.position.y + outOfBoundsThreshold;
             bottomThreshold = scrollRect.content.GetChild(childCount - 1).transform.position.y - outOfBoundsThreshold;
+        }
+
+        private IEnumerator StartInitSequence(GameObject scrollItem, int scrollItemCount, Action<GameObject[]> onComplete)
+        {
+            layoutGroup.enabled = true;
+
+            yield return new WaitForEndOfFrame();
+
+            GameObject[] spawnedItems = SpawnItems(scrollItem, scrollItemCount);
+
+            yield return new WaitForEndOfFrame();
 
             layoutGroup.enabled = false;
+
+            InitScrollVariables();
+
+            onComplete?.Invoke(spawnedItems);
+        }
+
+        private GameObject[] SpawnItems(GameObject spawnObject, int count)
+        {
+            GameObject[] items = new GameObject[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject goItem = Instantiate(spawnObject);
+                goItem.transform.SetParent(scrollRect.content.transform);
+
+                goItem.SetActive(true);
+                items[i] = goItem;
+            }
+
+            return items;
         }
 
         private void HandleScroll(Vector2 scrollPos) 
