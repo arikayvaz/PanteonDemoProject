@@ -5,11 +5,11 @@ namespace Gameplay
 {
     public class CameraController : Singleton<CameraController>, IController
     {
-        private Camera camera;
+        private Camera cameraMain;
 
         public void InitController()
         {
-            camera = Camera.main;
+            cameraMain = Camera.main;
 
             InitCamera(GameBoardManager.BoardSettings.BoardSize.x
                 , GameBoardManager.BoardSettings.BoardSize.y
@@ -20,7 +20,7 @@ namespace Gameplay
 
         public Vector2 GetWorldPosition(Vector2 screenPosition) 
         {
-            return camera.ScreenToWorldPoint(screenPosition);
+            return cameraMain.ScreenToWorldPoint(screenPosition);
         }
 
         private void InitCamera(int boardSizeX, int boardSizeY, int cellSize, float gameViewStartPct, float gameViewEndPct) 
@@ -36,9 +36,9 @@ namespace Gameplay
 
         private void AdjustCamera(float orthographicSize, Vector2 position) 
         {
-            camera.orthographicSize = orthographicSize;
+            cameraMain.orthographicSize = orthographicSize;
 
-            camera.transform.position = new Vector3(position.x, position.y, camera.transform.position.z);
+            cameraMain.transform.position = new Vector3(position.x, position.y, cameraMain.transform.position.z);
 
         }
 
