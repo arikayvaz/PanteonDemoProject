@@ -2,7 +2,6 @@ using Common;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEditor.Progress;
 
 namespace Gameplay
 {
