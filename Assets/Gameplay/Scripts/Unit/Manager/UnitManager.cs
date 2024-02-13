@@ -18,10 +18,10 @@ namespace Gameplay
         [SerializeField] UnitPlaceController placeController = null;
 
         [HideInInspector]
-        public UnityEvent OnUnitPicked;
+        public UnityEvent OnUnitPicked { get; private set; } = null;
 
         [HideInInspector]
-        public UnityEvent OnUnitSelected;
+        public UnityEvent OnUnitSelected { get; private set; } = null;
 
         List<UnitController> units = null;
 
@@ -45,12 +45,14 @@ namespace Gameplay
             selectController = new GameBoardSelectController<UnitController>();
             selectController.InitController();
 
-            BuildingManager.Instance.OnBuildingPicked.AddListener(OnBuildingPicked);
-            BuildingManager.Instance.OnBuildingSelected.AddListener(OnBuildingSelected);
+            OnUnitPicked = new UnityEvent();
+            OnUnitSelected = new UnityEvent();
         }
 
-        public void SubscribeUIEvents() 
+        public void SubscribeEvents() 
         {
+            BuildingManager.Instance.OnBuildingPicked.AddListener(OnBuildingPicked);
+            BuildingManager.Instance.OnBuildingSelected.AddListener(OnBuildingSelected);
             GameUIController.Instance.OnBuildingProduced.AddListener(OnBuildingProduced);
         }
 

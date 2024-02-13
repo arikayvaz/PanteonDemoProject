@@ -28,7 +28,7 @@ namespace Gameplay.BuildingControllerStateMachine
                 info.spawnPoint.OnPicked();
 
             OnInputCoordinateChanged(InputManager.Instance.CurrentInputCoordinate);
-            InputManager.Instance.OnInputCoordinateChange += OnInputCoordinateChanged;
+            InputManager.Instance.OnInputCoordinateChange.AddListener(OnInputCoordinateChanged);
         }
 
         public override void OnExit(StateInfo info)
@@ -37,7 +37,7 @@ namespace Gameplay.BuildingControllerStateMachine
 
             stateInfo = null;
 
-            InputManager.Instance.OnInputCoordinateChange -= OnInputCoordinateChanged;
+            InputManager.Instance.OnInputCoordinateChange.RemoveListener(OnInputCoordinateChanged);
         }
 
         public override void OnUpdate(StateInfo info)

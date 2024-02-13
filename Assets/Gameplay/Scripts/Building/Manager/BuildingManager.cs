@@ -9,10 +9,10 @@ namespace Gameplay
     public class BuildingManager : Singleton<BuildingManager>, IManager
     {
         [HideInInspector]
-        public UnityEvent OnBuildingPicked;
+        public UnityEvent OnBuildingPicked { get; private set; } = null;
 
         [HideInInspector]
-        public UnityEvent OnBuildingSelected;
+        public UnityEvent OnBuildingSelected { get; private set; } = null;
 
         [SerializeField] BuildingDataSO[] buildingDatas = null;
 
@@ -43,12 +43,14 @@ namespace Gameplay
             selectController = new GameBoardSelectController<BuildingController>();
             selectController.InitController();
 
-            UnitManager.Instance.OnUnitPicked.AddListener(OnUnitPicked);
-            UnitManager.Instance.OnUnitSelected.AddListener(OnUnitSelected);
+            OnBuildingPicked = new UnityEvent();
+            OnBuildingSelected = new UnityEvent();
         }
 
-        public void SubscribeUIEvents() 
+        public void SubscribeEvents() 
         {
+            UnitManager.Instance.OnUnitPicked.AddListener(OnUnitPicked);
+            UnitManager.Instance.OnUnitSelected.AddListener(OnUnitSelected);
             GameUIController.Instance.OnBuildingProduced.AddListener(OnBuildingProduced);
         }
 

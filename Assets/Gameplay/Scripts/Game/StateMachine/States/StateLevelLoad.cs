@@ -21,13 +21,13 @@ namespace Gameplay.GameManagerStateMachine
 
             Pathfinder.Instance.InitPathfinder(GameBoardManager.BoardSettings.BoardSize.x, GameBoardManager.BoardSettings.BoardSize.y);
 
-            BuildingManager.Instance.InitManager();
             UnitManager.Instance.InitManager();
+            BuildingManager.Instance.InitManager();
 
             GameUIController.Instance.InitController();
 
-            BuildingManager.Instance.SubscribeUIEvents();
-            UnitManager.Instance.SubscribeUIEvents();
+            BuildingManager.Instance.SubscribeEvents();
+            UnitManager.Instance.SubscribeEvents();
 
             stateMachine.ChangeState(States.Game);
         }

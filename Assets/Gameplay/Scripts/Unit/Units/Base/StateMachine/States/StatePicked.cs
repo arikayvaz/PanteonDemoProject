@@ -22,7 +22,7 @@ namespace Gameplay.UnitControllerStateMachine
             stateInfo.boardVisual.UpdateSortingOrder(GameBoardManager.BoardSettings.BoardSortingOrderPicked);
 
             OnInputCoordinateChanged(InputManager.Instance.CurrentInputCoordinate);
-            InputManager.Instance.OnInputCoordinateChange += OnInputCoordinateChanged;
+            InputManager.Instance.OnInputCoordinateChange.AddListener(OnInputCoordinateChanged);
         }
 
         public override void OnExit(StateInfo info)
@@ -31,7 +31,7 @@ namespace Gameplay.UnitControllerStateMachine
 
             stateInfo = null;
 
-            InputManager.Instance.OnInputCoordinateChange -= OnInputCoordinateChanged;
+            InputManager.Instance.OnInputCoordinateChange.RemoveListener(OnInputCoordinateChanged);
         }
 
         public override void OnUpdate(StateInfo info)

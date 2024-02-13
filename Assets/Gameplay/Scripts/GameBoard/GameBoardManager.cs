@@ -1,6 +1,5 @@
 using Common;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,11 +16,14 @@ namespace Gameplay
 
         private IPlaceable[,] placedObjects = null;
 
-        [HideInInspector] public UnityEvent<IPlaceable, IEnumerable<BoardCoordinate>> OnObjectPlaced;
-        [HideInInspector] public UnityEvent<IPlaceable, BoardCoordinate> OnPlaceObjectUpdated;
+        [HideInInspector] public UnityEvent<IPlaceable, IEnumerable<BoardCoordinate>> OnObjectPlaced { get; private set; } = null;
+        [HideInInspector] public UnityEvent<IPlaceable, BoardCoordinate> OnPlaceObjectUpdated { get; private set; } = null;
 
         public void InitManager()
         {
+            OnObjectPlaced = new UnityEvent<IPlaceable, IEnumerable<BoardCoordinate>>();
+            OnPlaceObjectUpdated = new UnityEvent<IPlaceable, BoardCoordinate>();
+
             InitPlacedObjects();
             SpawnBoardCells();
         }

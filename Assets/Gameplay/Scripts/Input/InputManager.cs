@@ -2,6 +2,7 @@ using Common;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Gameplay
@@ -11,13 +12,15 @@ namespace Gameplay
         public Vector2 WorldPosition { get; private set; } = Vector2.zero;
         private Vector2 lastInputPosition = Vector2.zero;
         public BoardCoordinate CurrentInputCoordinate { get; private set; } = BoardCoordinate.Invalid;
-        public Action<BoardCoordinate> OnInputCoordinateChange;
+        [HideInInspector] public UnityEvent<BoardCoordinate> OnInputCoordinateChange { get; private set; } = null;
 
         private bool isInitialized = false;
 
         public void InitManager() 
         {
             isInitialized = true;
+
+            OnInputCoordinateChange = new UnityEvent<BoardCoordinate>();
         }
 
         private void Update()
