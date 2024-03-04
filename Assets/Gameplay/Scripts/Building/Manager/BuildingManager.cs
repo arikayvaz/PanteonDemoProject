@@ -164,7 +164,12 @@ namespace Gameplay
 
         public bool PlaceBuilding() 
         {
-            bool isPlacingSuccess = placeController.PlaceBuilding(pickController.PickedBuilding);
+            IPlaceable placeable = pickController.PickedBuilding as IPlaceable;
+
+            if (placeable == null)
+                return false;
+
+            bool isPlacingSuccess = placeController.PlaceBuilding(placeable);
 
             if (isPlacingSuccess)
                 pickController.DropObject();

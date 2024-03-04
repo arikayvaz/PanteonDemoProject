@@ -10,7 +10,7 @@ namespace Gameplay
             
         }
 
-        public bool PlaceBuilding(BuildingController building) 
+        public bool PlaceBuilding(IPlaceable placeable) 
         {
             Vector2 inputWorldPos = InputManager.Instance.WorldPosition;
             BoardCoordinate placeCoord = GameBoardManager.Instance.GetCoordinateFromWorldPosition(inputWorldPos);
@@ -18,11 +18,11 @@ namespace Gameplay
             if (!GameBoardManager.Instance.IsCoordinatePlaceable(placeCoord))
                 return false;
 
-            if (!GameBoardManager.Instance.IsCoordinatesPlaceable(building.GetPlaceCoordinates(placeCoord, true)))
+            if (!GameBoardManager.Instance.IsCoordinatesPlaceable(placeable.GetPlaceCoordinates(placeCoord, true)))
                 return false;
 
-            building.Place(placeCoord);
-            GameBoardManager.Instance.OnBuildingPlaced(building, building.GetPlaceCoordinates(false));
+            placeable.Place(placeCoord);
+            GameBoardManager.Instance.OnBuildingPlaced(placeable, placeable.GetPlaceCoordinates(false));
             return true;
         }
     }

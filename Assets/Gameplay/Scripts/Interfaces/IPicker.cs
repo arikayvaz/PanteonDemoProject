@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public interface IPicker<T> where T : IPickable
+    public interface IPicker
     {
-        void PickObject(T pickObject);
+        void PickObject(IPickable pickObject);
         void DropObject();
     }
 }

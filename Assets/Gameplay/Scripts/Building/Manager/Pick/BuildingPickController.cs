@@ -4,24 +4,24 @@ using System.Collections.Generic;
 
 namespace Gameplay
 {
-    public class BuildingPickController : MonoBehaviour, IController, IPicker<BuildingController>
+    public class BuildingPickController : MonoBehaviour, IController, IPicker
     {
         public bool IsPickedBuilding => PickedBuilding != null;
 
-        public BuildingController PickedBuilding { get; private set; } = null;
+        public IPickable PickedBuilding { get; private set; } = null;
 
         public void InitController()
         {
             
         }
 
-        public void PickObject(BuildingController pickObject)
+        public void PickObject(IPickable pickable)
         {
             if (IsPickedBuilding)
-                pickObject.Drop();
+                pickable.Drop();
 
-            pickObject.Pick();
-            PickedBuilding = pickObject;
+            pickable.Pick();
+            PickedBuilding = pickable;
         }
 
         public void DropObject()
