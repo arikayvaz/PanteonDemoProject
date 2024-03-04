@@ -186,11 +186,6 @@ namespace Gameplay
 
         public void PlaceUnit(UnitTypes unitType, BoardCoordinate placeCoordinate)
         {
-            /*
-            if (!pickController.IsPickedUnit)
-                return;
-            */
-
             if (!GameBoardManager.Instance.IsCoordinatePlaceable(placeCoordinate))
                 return;
 
@@ -207,12 +202,6 @@ namespace Gameplay
                 return;
 
             placeController.PlaceUnit(unit, placeCoordinate);
-
-            /*
-            if (isPlacingSuccess)
-                pickController.DropObject();
-            */
-
         }
 
         #endregion

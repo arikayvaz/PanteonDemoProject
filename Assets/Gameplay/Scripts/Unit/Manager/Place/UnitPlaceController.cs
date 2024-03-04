@@ -10,16 +10,16 @@ namespace Gameplay
             
         }
 
-        public bool PlaceUnit(UnitController unit, BoardCoordinate placeCoordinate)
+        public bool PlaceUnit(IPlaceable placeable, BoardCoordinate placeCoordinate)
         {
             if (!GameBoardManager.Instance.IsCoordinatePlaceable(placeCoordinate))
                 return false;
 
-            if (!GameBoardManager.Instance.IsCoordinatesPlaceable(unit.GetPlaceCoordinates(placeCoordinate)))
+            if (!GameBoardManager.Instance.IsCoordinatesPlaceable(placeable.GetPlaceCoordinates(placeCoordinate)))
                 return false;
 
-            unit.Place(placeCoordinate);
-            GameBoardManager.Instance.OnUnitPlaced(unit, unit.GetPlaceCoordinates());
+            placeable.Place(placeCoordinate);
+            GameBoardManager.Instance.OnUnitPlaced(placeable, placeable.GetPlaceCoordinates());
             return true;
         }
     }

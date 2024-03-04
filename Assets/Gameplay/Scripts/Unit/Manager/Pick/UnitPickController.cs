@@ -3,24 +3,24 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class UnitPickController : MonoBehaviour, IController, IPicker<UnitController>
+    public class UnitPickController : MonoBehaviour, IController, IPicker
     {
         public bool IsPickedUnit => PickedUnit != null;
 
-        public UnitController PickedUnit { get; private set; } = null;
+        public IPickable PickedUnit { get; private set; } = null;
 
         public void InitController()
         {
             
         }
 
-        public void PickObject(UnitController pickObject)
+        public void PickObject(IPickable pickable)
         {
             if (IsPickedUnit)
-                pickObject.Drop();
+                pickable.Drop();
 
-            pickObject.Pick();
-            PickedUnit = pickObject;
+            pickable.Pick();
+            PickedUnit = pickable;
         }
 
         public void DropObject()
