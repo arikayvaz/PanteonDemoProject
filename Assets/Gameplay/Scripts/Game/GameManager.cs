@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class GameManager : Singleton<GameManager>, IManager
+    public class GameManager : SingletonMonobehaviour<GameManager>, IManager
     {
         public bool IsGameRunning => stateMachine?.State?.StateId == States.Game;
 

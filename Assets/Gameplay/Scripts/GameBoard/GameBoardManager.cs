@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace Gameplay
 {
-    public class GameBoardManager : Singleton<GameBoardManager>, IManager
+    public class GameBoardManager : SingletonMonobehaviour<GameBoardManager>, IManager
     {
         [SerializeField] GameBoardSettingsSO boardSettings = null;
         public static GameBoardSettingsSO BoardSettings => Instance?.boardSettings;

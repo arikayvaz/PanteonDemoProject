@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 namespace Gameplay
 {
-    public class InputManager : Singleton<InputManager>, IManager
+    public class InputManager : SingletonMonobehaviour<InputManager>, IManager
     {
         public Vector2 WorldPosition { get; private set; } = Vector2.zero;
         private Vector2 lastInputPosition = Vector2.zero;

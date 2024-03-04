@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class Pathfinder : Singleton<Pathfinder>
+    public class Pathfinder : SingletonMonobehaviour<Pathfinder>
     {
         //TODO: Optimize pathfinder 
         const int MOVE_STRAIGHT_COST = 10;

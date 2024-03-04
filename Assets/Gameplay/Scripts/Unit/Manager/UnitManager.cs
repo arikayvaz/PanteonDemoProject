@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 namespace Gameplay
 {
-    public class UnitManager : Singleton<UnitManager>, IManager
+    public class UnitManager : SingletonMonobehaviour<UnitManager>, IManager
     {
         [SerializeField] UnitDataSO[] unitDatas = null;
 

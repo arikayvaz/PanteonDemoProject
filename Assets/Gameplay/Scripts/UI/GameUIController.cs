@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace Gameplay
 {
-    public class GameUIController : Singleton<GameUIController>, IController
+    public class GameUIController : SingletonMonobehaviour<GameUIController>, IController
     {
         [SerializeField] BuildingProductionUIController buildingProductionController = null;
         [SerializeField] BuildingInformationUIController buildingInformationController = null;

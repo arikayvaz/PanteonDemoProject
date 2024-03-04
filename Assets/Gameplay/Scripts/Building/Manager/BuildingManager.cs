@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace Gameplay
 {
-    public class BuildingManager : Singleton<BuildingManager>, IManager
+    public class BuildingManager : SingletonMonobehaviour<BuildingManager>, IManager
     {
         [HideInInspector]
         public UnityEvent OnBuildingPicked { get; private set; } = null;
